@@ -60,7 +60,7 @@ const About = () => {
     <section
       id="about"
       ref={sectionRef}
-      className="relative w-full min-h-screen bg-[#050505] text-white py-32 px-6 md:px-12 flex flex-col justify-center select-none overflow-hidden"
+      className="relative w-full min-h-screen bg-[#050505] text-white py-24 md:py-32 px-4 md:px-12 flex flex-col justify-center select-none overflow-x-hidden"
     >
       {/* Background Cinematic Red Ambient Glows */}
       <div className="absolute top-1/4 left-10 w-[500px] h-[500px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none"></div>
@@ -90,7 +90,7 @@ const About = () => {
           {/* Card 1: Bio & Academic Core (Span 7) */}
           <div
             ref={addToRefs}
-            className="md:col-span-7 p-8 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col justify-between relative group hover:border-red-600/60 transition-all duration-500 overflow-hidden"
+            className="md:col-span-7 p-5 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col justify-between relative group hover:border-red-600/60 transition-all duration-500 overflow-hidden"
           >
             {/* Real-time mouse hover spotlight highlight */}
             <div 
@@ -106,25 +106,25 @@ const About = () => {
             
             <div className="space-y-5 relative z-10">
               <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold">Cast & Background</h3>
-              <p className="text-lg md:text-xl font-medium text-white/90 leading-relaxed">
-                I am <span className="text-white font-bold drop-shadow">Dasari Venkata Ratna Sri Sushmita</span>, a B.Tech student in Artificial Intelligence and Machine Learning at Aditya Engineering College.
+              <p className="text-lg md:text-xl font-medium text-white/90 leading-relaxed break-words">
+                I am <span className="text-white font-bold drop-shadow">Moiz Jawad</span>, a Flutter and full-stack developer in Karachi, Sindh, Pakistan, and a BS Computer Science graduate of Quaid-e-Awam University of Engineering, Sciences and Technology, Nawabshah.
               </p>
               <p className="text-sm md:text-base text-white/60 font-light leading-relaxed">
-                My technical narrative bridges rigorous algorithmic problem-solving with full-stack software architecture, translating complex backend logic into seamless, high-performance interfaces.
+                Experienced in building scalable mobile and web applications. Skilled in Flutter and React, with hands-on work in React, Redux, Vite, Tailwind CSS, shadcn/ui, Node.js, Express.js, MongoDB, and Supabase. Also experienced in REST APIs, authentication, real-time systems, Google Maps, and AI integrations.
               </p>
             </div>
             
             <div className="pt-8 flex flex-wrap gap-2 relative z-10">
-              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">AI & ML</span>
-              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">Full-Stack Development</span>
-              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">System Architecture</span>
+              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">Flutter & Dart</span>
+              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">React</span>
+              <span className="px-3.5 py-1.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-white/80">Node.js</span>
             </div>
           </div>
 
           {/* Card 2: Fellowships & Achievements (Span 5) */}
           <div
             ref={addToRefs}
-            className="md:col-span-5 p-8 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col justify-between relative group hover:border-red-600/60 transition-all duration-500 overflow-hidden"
+            className="md:col-span-5 p-5 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col justify-between relative group hover:border-red-600/60 transition-all duration-500 overflow-hidden"
           >
             {/* Real-time mouse hover spotlight highlight */}
             <div 
@@ -143,15 +143,19 @@ const About = () => {
               <ul className="space-y-3.5 text-sm text-white/80 font-light">
                 <li className="flex items-start gap-2.5">
                   <span className="text-red-500 font-bold">&#8250;</span>
-                  <span>National Semi-Finalist in <strong className="text-white">Flipkart GRiD 7.0</strong> competition.</span>
+                  <span>Junior Flutter Developer at <strong className="text-white">TeamX Pakistan</strong>, Karachi. Apr 2026 – Present.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <span className="text-red-500 font-bold">&#8250;</span>
-                  <span>Member of the elite <strong className="text-white">AlgoUniversity Tech Fellowship</strong> for advanced data structures.</span>
+                  <span>Associate Software Developer at <strong className="text-white">Qonkar Technologies</strong>, Nawabshah. Sep 2025 – Dec 2025.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <span className="text-red-500 font-bold">&#8250;</span>
-                  <span>Certified <strong className="text-white">GitHub Foundations</strong> & <strong className="text-white">AWS Certified AI Practitioner</strong>.</span>
+                  <span>Android Developer (Jun 2025 – Sep 2025) and Flutter Developer (Sep 2025) at <strong className="text-white">Digital Empowerment Network</strong>, Islamabad.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-red-500 font-bold">&#8250;</span>
+                  <span>Udemy: React Complete Developer Course, Node.js Practical Project, The Complete JavaScript Course, Complete Flutter Guide 2024, Dart & Flutter, and Dart Mastery.</span>
                 </li>
               </ul>
             </div>
@@ -164,7 +168,7 @@ const About = () => {
           {/* Card 3: Technical Ecosystem (Span 12) */}
           <div
             ref={addToRefs}
-            className="md:col-span-12 p-8 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 hover:border-red-600/60 transition-all duration-500 overflow-hidden relative group"
+            className="md:col-span-12 p-5 md:p-12 bg-[#141414]/90 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 hover:border-red-600/60 transition-all duration-500 overflow-hidden relative group"
           >
             {/* Real-time mouse hover spotlight highlight */}
             <div 
@@ -176,11 +180,11 @@ const About = () => {
 
             <div className="space-y-2 text-left relative z-10">
               <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold">Production Tech Stack</h3>
-              <p className="text-base md:text-lg font-semibold text-white">Equipped with industry-grade instruments for robust scaling.</p>
+              <p className="text-base md:text-lg font-semibold text-white">Flutter, React, and the backend tools named on the profile.</p>
             </div>
             
             <div className="flex flex-wrap items-center gap-3 relative z-10">
-              {['React', 'Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Docker', 'JavaScript'].map((tech, idx) => (
+              {['Flutter', 'Dart', 'React', 'Redux', 'Node.js', 'Express', 'MongoDB', 'Supabase'].map((tech, idx) => (
                 <span
                   key={idx}
                   className="px-4 py-2 rounded bg-white/[0.04] border border-white/10 text-xs font-mono uppercase tracking-wider text-white shadow-inner hover:bg-red-600/20 hover:border-red-600/40 hover:scale-105 transition-all"

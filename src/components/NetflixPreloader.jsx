@@ -4,13 +4,19 @@ import { gsap } from 'gsap';
 const MinimalPreloader = ({ onComplete }) => {
   const preloaderRef = useRef(null);
   const contentRef = useRef(null);
+  const timelineRef = useRef(null);
+  const finishedRef = useRef(false);
+
+  const finish = () => {
+    if (finishedRef.current) return;
+    finishedRef.current = true;
+    timelineRef.current?.kill();
+    if (onComplete) onComplete();
+  };
 
   useEffect(() => {
-    const tl = gsap.timeline({
-      onComplete: () => {
-        if (onComplete) onComplete();
-      }
-    });
+    const tl = gsap.timeline({ onComplete: finish });
+    timelineRef.current = tl;
 
     tl.set(preloaderRef.current, { autoAlpha: 1 })
       .fromTo(
@@ -31,6 +37,8 @@ const MinimalPreloader = ({ onComplete }) => {
         duration: 0.5,
         ease: "power2.inOut"
       });
+
+    return () => tl.kill();
   }, [onComplete]);
 
   return (
@@ -47,8 +55,15 @@ const MinimalPreloader = ({ onComplete }) => {
           className="text-2xl md:text-3xl font-black uppercase tracking-[0.3em] text-white"
           style={{ fontFamily: "'Bebas Neue', 'Impact', sans-serif" }}
         >
-          SUSHMITA
+          MOIZ
         </h1>
+        <button
+          type="button"
+          className="min-h-11 px-6 rounded border border-white/30 text-xs font-mono uppercase tracking-widest text-white"
+          onClick={finish}
+        >
+          Continue
+        </button>
       </div>
     </div>
   );

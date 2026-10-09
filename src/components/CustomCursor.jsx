@@ -1,12 +1,22 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 const CustomCursor = () => {
   const dotRef = useRef(null);
   const ringRef = useRef(null);
   const spotlightRef = useRef(null);
+  const [isPhone, setIsPhone] = useState(() => window.matchMedia('(max-width: 767px)').matches);
 
   useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px)');
+    const update = () => setIsPhone(media.matches);
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (isPhone) return;
+
     const dot = dotRef.current;
     const ring = ringRef.current;
     const spotlight = spotlightRef.current;
@@ -57,7 +67,9 @@ const CustomCursor = () => {
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, []);
+  }, [isPhone]);
+
+  if (isPhone) return null;
 
   return (
     <>

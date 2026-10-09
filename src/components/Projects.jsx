@@ -7,68 +7,44 @@ gsap.registerPlugin(ScrollTrigger);
 // Authentic Project Data based on your engineering portfolio
 const projectsData = [
   {
-    title: "Notice Hub",
-    category: "Full-Stack Architecture",
-    description: "Consolidates university announcements and streamlines real-time student communication with high uptime.",
-    tags: ["React", "Node.js", "Express", "MongoDB"],
-    match: "99%",
+    title: "Shop App",
+    category: "Flutter · E-commerce",
+    description: "E-commerce mobile app with product listing and details, shopping cart, login and signup, favorites, Provider state management, and a responsive layout. Stack: Flutter/Dart, Firebase or REST API, Provider, Git.",
+    tags: ["Flutter", "Dart", "Provider", "Firebase"],
+    meta: "LinkedIn Project",
     episode: "S01 E01"
   },
   {
-    title: "Multi-Tenant SaaS Platform",
-    category: "Cloud & Distributed Systems",
-    description: "Containerized enterprise SaaS featuring strict database isolation and granular role-based access control.",
-    tags: ["Docker", "PostgreSQL", "Node.js", "Express"],
-    match: "98%",
+    title: "TeamX Pakistan",
+    category: "Junior Flutter Developer",
+    description: "Apr 2026 – Present, Karachi. Cross-platform Flutter and Dart apps, REST API integration, third-party packages, code reviews, CI/CD, and Agile.",
+    tags: ["Flutter", "Dart", "REST APIs", "CI/CD"],
+    meta: "Current",
     episode: "S01 E02"
   },
   {
-    title: "Payment Gateway System",
-    category: "Fintech Architecture",
-    description: "Simulates complex transaction state management, webhook verification, and multi-method processing.",
-    tags: ["JavaScript", "PostgreSQL", "REST APIs", "Docker"],
-    match: "97%",
+    title: "Qonkar Technologies",
+    category: "Associate Software Developer",
+    description: "Sep 16 – Dec 15, 2025, Nawabshah. Front-end internship on real-world web projects.",
+    tags: ["Web", "Front End", "Internship"],
+    meta: "Sep 2025 – Dec 2025",
     episode: "S01 E03"
   },
   {
-    title: "Productivity Suite Extension",
-    category: "Client-Side Engineering",
-    description: "Custom Chrome extension built with Chrome APIs and advanced JavaScript for task automation and management.",
-    tags: ["JavaScript", "Chrome APIs", "Tailwind CSS", "HTML5"],
-    match: "99%",
+    title: "DEN Android",
+    category: "Android Developer",
+    description: "Jun 2025 – Sep 2025, Islamabad. Flutter and Dart apps, Supabase real-time sync and offline-safe commands, modular UI that cut frontend time by 40%.",
+    tags: ["Flutter", "Supabase", "UI/UX"],
+    meta: "Jun 2025 – Sep 2025",
     episode: "S01 E04"
   },
   {
-    title: "AI & ML Diagnostic Engine",
-    category: "Artificial Intelligence",
-    description: "Intelligent data processing pipeline leveraging machine learning models and NLP workflows.",
-    tags: ["Python", "Machine Learning", "NLP", "AWS"],
-    match: "96%",
+    title: "DEN Flutter",
+    category: "Flutter Developer",
+    description: "Sep 2025, Islamabad. Engineering and Technical department, Specialist level.",
+    tags: ["Flutter", "Islamabad"],
+    meta: "Sep 2025",
     episode: "S01 E05"
-  },
-  {
-    title: "Algorithmic Problem Solver",
-    category: "Competitive Programming",
-    description: "Optimized data structure solutions across LeetCode, CodeChef, and GeeksforGeeks platforms.",
-    tags: ["Data Structures", "Algorithms", "C++", "JavaScript"],
-    match: "99%",
-    episode: "S01 E06"
-  },
-  {
-    title: "Portfolio Cinematics v2.6",
-    category: "UI/UX & Animation",
-    description: "Award-winning dark studio interactive portfolio featuring GSAP physics and responsive layouts.",
-    tags: ["React", "GSAP", "Tailwind CSS", "Framer Motion"],
-    match: "100%",
-    episode: "S01 E07"
-  },
-  {
-    title: "Cloud CI/CD Pipeline",
-    category: "DevOps & Infrastructure",
-    description: "Automated deployment workflows using GitHub Actions and containerized Docker environments.",
-    tags: ["Docker", "GitHub Actions", "CI/CD", "Render"],
-    match: "98%",
-    episode: "S01 E08"
   }
 ];
 
@@ -90,11 +66,14 @@ const Projects = () => {
       gsap.set(folderFrontRef.current, { transformOrigin: "bottom center" });
       
       const getGridPos = (index) => {
-        let row, col;
-        if (index < 3) { row = 0; col = index; }
-        else if (index === 3) { row = 1; col = 0; }
-        else if (index === 4) { row = 1; col = 2; }
-        else { row = 2; col = index - 5; }
+        const cols = 3;
+        const count = projectsData.length;
+        const rowIndex = Math.floor(index / cols);
+        const colInRow = index % cols;
+        const itemsInRow = Math.min(cols, count - rowIndex * cols);
+        const col = colInRow + (cols - itemsInRow) / 2;
+        const rows = Math.ceil(count / cols);
+        const row = rowIndex - (rows - 1) / 2 + 1;
         return { row, col };
       };
 
@@ -184,57 +163,19 @@ const Projects = () => {
         }
 
         if (isMobile) {
-          const cardW = window.innerWidth * 0.8;
-          const gap = 20;
-          
-          mobileCardsRef.current.forEach((card, i) => {
+          mobileCardsRef.current.forEach((card) => {
             gsap.set(card, {
-              x: -(i * (cardW + gap)), 
+              x: 0,
               y: 0,
-              scale: 0.4,
-              opacity: 0,
-              rotation: gsap.utils.random(-15, 15)
+              scale: 1,
+              opacity: 1,
+              rotation: 0
             });
           });
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: "top 60%",
-            }
-          });
-
-          tl.to(folderFrontRef.current, {
-            rotationX: -130,
-            duration: 0.8,
-            ease: "power3.inOut"
-          });
-
-          tl.to(mobileCardsRef.current, {
-            y: -100,
-            opacity: 1,
-            scale: 0.85,
-            duration: 0.6,
-            stagger: 0.05,
-            ease: "back.out(1.2)"
-          }, "-=0.4");
-
-          tl.to(mobileCardsRef.current, {
-            x: 0,
-            y: 0,
-            rotation: 0,
-            scale: (i) => i === 0 ? 1 : 0.92,
-            opacity: (i) => i === 0 ? 1 : 0.5,
-            duration: 0.8,
-            stagger: 0.08,
-            ease: "expo.out",
-            onComplete: () => {
-              if (mobileCarouselRef.current) {
-                mobileCarouselRef.current.style.overflowX = 'auto';
-                mobileCarouselRef.current.style.pointerEvents = 'auto';
-              }
-            }
-          }, "-=0.2");
+          if (mobileCarouselRef.current) {
+            mobileCarouselRef.current.style.overflowX = 'auto';
+            mobileCarouselRef.current.style.pointerEvents = 'auto';
+          }
         }
       });
     }, containerRef);
@@ -243,7 +184,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <section id="projects" ref={containerRef} className="bg-[#0b0b0b] min-h-[100svh] md:min-h-[170vh] relative font-sans overflow-x-clip text-white w-full flex items-center justify-center py-24 md:py-40 select-none">
+    <section id="projects" ref={containerRef} className="bg-[#0b0b0b] min-h-0 md:min-h-[170vh] relative font-sans overflow-x-clip text-white w-full flex flex-col items-center justify-center py-16 md:py-40 select-none">
       
       {/* Background Netflix Cinematic Title Watermark */}
       <div className="absolute top-10 left-0 w-full flex items-start justify-center pointer-events-none z-0">
@@ -256,7 +197,7 @@ const Projects = () => {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55vw] h-[55vw] bg-red-600/15 rounded-full blur-[160px] pointer-events-none z-0" />
 
       {/* Main Perspective Container */}
-      <div className="mt-12 relative w-full max-w-7xl h-full flex items-center justify-center perspective-[2000px] z-10">
+      <div className="mt-12 relative w-full max-w-7xl h-full hidden md:flex items-center justify-center perspective-[2000px] z-10">
         
         {/* Origin Container */}
         <div className="relative w-0 h-0 transform-style-3d">
@@ -289,7 +230,7 @@ const Projects = () => {
                     {project.episode}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-red-400 font-bold">{project.match} Match</span>
+                    <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
                     <span className="text-[10px] font-mono border border-white/30 px-1 text-white/70">HD</span>
                   </div>
                 </div>
@@ -339,7 +280,7 @@ const Projects = () => {
       {/* Mobile Swipeable Carousel */}
       <div 
         ref={mobileCarouselRef}
-        className="md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-screen h-auto py-12 flex items-center gap-6 px-[12.5vw] pointer-events-none z-[100] snap-x snap-mandatory overflow-x-hidden hide-scrollbar"
+        className="md:hidden relative w-full h-auto py-6 flex items-stretch gap-4 px-4 z-10 snap-x snap-mandatory overflow-x-auto pointer-events-auto hide-scrollbar"
       >
         <style>{`
           .hide-scrollbar::-webkit-scrollbar { display: none; }
@@ -349,18 +290,18 @@ const Projects = () => {
           <div 
             key={`mob-${i}`}
             ref={el => mobileCardsRef.current[i] = el}
-            className="shrink-0 w-[78vw] aspect-[16/11] snap-center will-change-transform relative z-10"
+            className="shrink-0 w-[calc(100vw-3.5rem)] max-w-[340px] min-h-[220px] snap-center will-change-transform relative z-10"
           >
             <div className="w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414] p-6 flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-mono font-bold tracking-widest text-red-500 bg-red-600/10 px-2 py-0.5 rounded">
                   {project.episode}
                 </span>
-                <span className="text-xs font-mono text-red-400 font-bold">{project.match} Match</span>
+                <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
               </div>
               <div className="space-y-2">
                 <h3 className="text-xl font-black text-white">{project.title}</h3>
-                <p className="text-xs text-white/70 font-light line-clamp-2">{project.description}</p>
+                <p className="text-xs text-white/70 font-light break-words">{project.description}</p>
               </div>
               <div className="flex flex-wrap gap-1 pt-2 border-t border-white/10">
                 {project.tags.slice(0, 3).map((tag, tIdx) => (

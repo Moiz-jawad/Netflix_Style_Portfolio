@@ -9,8 +9,11 @@
   }
 }
 
+/* Phone layout is 320px through 767px. Wide layout is 768px and above. */
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
+  scroll-padding-top: 5.5rem;
 }
 
 body {
@@ -18,6 +21,7 @@ body {
   padding: 0;
   background-color: #000;
   color: #fff;
+  overflow-x: clip;
 }
 
 [data-aos="drop-bounce"] {

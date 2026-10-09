@@ -6,40 +6,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 const skillCategories = [
   { 
-    title: 'Frontend Engineering', 
-    desc: 'Crafting responsive and interactive user interfaces using React, JavaScript, HTML5, CSS3, and Tailwind CSS.', 
-    tag: 'UI / INTERACTION',
-    skills: ['React', 'JavaScript', 'Tailwind CSS', 'HTML5', 'CSS3'] 
+    title: 'Mobile', 
+    desc: 'Cross-platform mobile apps with Flutter and Dart, including Provider for app-wide state.', 
+    tag: 'FLUTTER',
+    skills: ['Flutter', 'Dart', 'Provider', 'UI/UX'] 
   },
   { 
-    title: 'Backend & Databases', 
-    desc: 'Building secure REST APIs, authentication flows, server-side applications, and high-performance database architectures.', 
-    tag: 'ARCHITECTURE',
-    skills: ['Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'DQL'] 
+    title: 'Frontend', 
+    desc: 'Web interfaces with React, Redux, Vite, Tailwind CSS, and shadcn/ui.', 
+    tag: 'REACT',
+    skills: ['React', 'Redux', 'Vite', 'Tailwind CSS', 'shadcn/ui'] 
   },
   { 
-    title: 'AI & Machine Learning', 
-    desc: 'Developing intelligent applications leveraging NLP, generative AI workflows, computer vision, and LLM systems.', 
-    tag: 'INTELLIGENCE',
-    skills: ['NLP', 'Generative AI', 'Computer Vision', 'LLMs', 'AWS AI'] 
+    title: 'Backend', 
+    desc: 'Server work with Node.js, Express.js, MongoDB, Supabase, and Firebase.', 
+    tag: 'APIS',
+    skills: ['Node.js', 'Express.js', 'MongoDB', 'Supabase', 'Firebase'] 
   },
   { 
-    title: 'Cloud & DevOps', 
-    desc: 'Deploying and scaling production-grade applications using Docker containers, GitHub Actions, and CI/CD pipelines.', 
-    tag: 'INFRASTRUCTURE',
-    skills: ['Docker', 'GitHub', 'CI/CD Pipelines', 'Render', 'Docker Hub'] 
+    title: 'Integrations', 
+    desc: 'REST APIs, authentication, real-time systems, Google Maps, and AI integrations.', 
+    tag: 'SYSTEMS',
+    skills: ['REST APIs', 'Authentication', 'Real-time', 'Google Maps', 'AI integrations'] 
   },
   { 
-    title: 'Algorithmic Problem Solving', 
-    desc: 'Optimizing data structures and solving complex algorithmic challenges across competitive programming platforms.', 
-    tag: 'COMPETITIVE',
-    skills: ['Data Structures', 'Algorithms', 'LeetCode', 'CodeChef', 'GFG'] 
+    title: 'Delivery', 
+    desc: 'Git and GitHub, plus CI/CD, Agile practices, and code reviews from the TeamX role.', 
+    tag: 'PRACTICE',
+    skills: ['Git', 'GitHub', 'CI/CD', 'Agile', 'Code review'] 
   },
   { 
-    title: 'Tools & Ecosystem', 
-    desc: 'Equipped with industry-grade instruments for version control, productivity extensions, and workflow management.', 
-    tag: 'PRODUCTIVITY',
-    skills: ['Git', 'Chrome APIs', 'Adobe Express', 'Google Cloud', 'VS Code'] 
+    title: 'Udemy Certificates', 
+    desc: 'Completed courses listed on the LinkedIn licenses section.', 
+    tag: 'UDEMY',
+    skills: ['React Course', 'Node.js Course', 'JavaScript Course', 'Flutter Guide 2024', 'Dart & Flutter', 'Dart Mastery'] 
   },
 ];
 
@@ -172,7 +172,7 @@ const Skills = () => {
     <section 
       id="skills"
       ref={sectionRef} 
-      className="relative w-full h-screen bg-[#0b0b0b] text-white overflow-hidden flex items-center justify-center md:[perspective:1000px] select-none"
+      className="relative w-full h-auto min-h-[70vh] py-16 md:h-screen md:min-h-0 md:py-0 bg-[#0b0b0b] text-white overflow-x-hidden flex items-center justify-center md:[perspective:1000px] select-none"
     >
       {/* Dynamic Netflix Dark Background Vignettes */}
       {skillCategories.map((_, i) => (
@@ -202,14 +202,14 @@ const Skills = () => {
 
       {/* Carousel Container */}
       <div 
-        className="relative w-full h-full flex md:items-center md:justify-center z-10 md:[transform-style:preserve-3d] overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-[10vw] md:px-0 gap-4 md:gap-0 touch-pan-x"
+        className="relative w-full h-auto md:h-full flex md:items-center md:justify-center z-10 md:[transform-style:preserve-3d] overflow-x-auto overflow-y-hidden md:overflow-visible snap-x snap-mandatory scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] items-center px-4 md:px-0 gap-4 md:gap-0 touch-pan-x"
         onScroll={handleScroll}
       >
         {skillCategories.map((category, i) => (
           <div 
             key={i}
             ref={el => cardsRef.current[i] = el}
-            className="md:absolute relative shrink-0 snap-center w-[82vw] sm:w-[360px] md:w-[440px] h-[460px] md:h-[540px] rounded-[32px] p-8 md:p-10 bg-[#141414]/95 backdrop-blur-2xl border border-white/15 flex flex-col justify-between overflow-hidden group shadow-[0_30px_60px_rgba(0,0,0,0.9)] hover:border-red-600/80 transition-colors duration-500"
+            className="md:absolute relative shrink-0 snap-center w-[calc(100vw-3rem)] max-w-[360px] md:max-w-none md:w-[440px] h-auto min-h-[420px] md:h-[540px] rounded-[32px] p-6 md:p-10 bg-[#141414]/95 backdrop-blur-2xl border border-white/15 flex flex-col justify-between overflow-hidden group shadow-[0_30px_60px_rgba(0,0,0,0.9)] hover:border-red-600/80 transition-colors duration-500"
           >
             {/* Inner Red Glossy Reflection */}
             <div className="absolute inset-0 bg-gradient-to-tr from-red-600/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-20" />
@@ -220,7 +220,7 @@ const Skills = () => {
                 {category.tag}
               </span>
               <span className="text-xs font-mono text-white/40">
-                [ 0{i + 1} / 06 ]
+                [ 0{i + 1} / 0{skillCategories.length} ]
               </span>
             </div>
 

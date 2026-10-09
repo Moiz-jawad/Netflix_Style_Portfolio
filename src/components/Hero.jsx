@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import pictureImg from '../assets/Portfolio/picture.png';
 
@@ -10,13 +10,32 @@ const Hero = () => {
   const cursorDotRef = useRef(null);
   const cursorRingRef = useRef(null);
   const contentRef = useRef(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const sectionLinks = [
+    ['#home', 'Home'],
+    ['#about', 'About'],
+    ['#expertise', 'Expertise'],
+    ['#skills', 'Skills'],
+    ['#projects', 'Projects'],
+    ['#contact', 'Contact']
+  ];
 
   const developerRoles = [
-    'FEATURE FILM // FULL-STACK ARCHITECT',
-    'ORIGINAL SERIES // AI & ML SPECIALIST',
-    'BLOCKBUSTER // DISTRIBUTED SYSTEMS',
-    'ACCLAIMED // ALGORITHMIC PROBLEM SOLVER'
+    'JUNIOR FLUTTER DEVELOPER // TEAMX PAKISTAN',
+    'ASSOCIATE SOFTWARE DEVELOPER // QONKAR TECHNOLOGIES',
+    'FLUTTER DEVELOPER // DIGITAL EMPOWERMENT NETWORK',
+    'ANDROID DEVELOPER // DIGITAL EMPOWERMENT NETWORK'
   ];
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 768px)');
+    const closeOnWide = () => {
+      if (media.matches) setMenuOpen(false);
+    };
+    media.addEventListener('change', closeOnWide);
+    return () => media.removeEventListener('change', closeOnWide);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -134,7 +153,8 @@ const Hero = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-screen bg-[#050505] overflow-hidden flex flex-col justify-between select-none cursor-none"
+      id="home"
+      className="relative w-full min-h-screen h-auto md:h-screen bg-[#050505] overflow-x-hidden md:overflow-hidden flex flex-col justify-between select-none cursor-auto md:cursor-none"
     >
       <style>{`
         @keyframes marquee {
@@ -179,11 +199,11 @@ const Hero = () => {
             <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
             <span className="text-red-500 font-bold tracking-wider">NETFLIX DEVELOPER SERIES</span>
             <span className="text-white/40">|</span>
-            <span className="text-white/80">SEASONS 2024 - 2026</span>
+            <span className="text-white/80">SEASONS 2025 - 2026</span>
           </div>
           <div className="hidden md:flex items-center gap-2 text-xs font-mono text-white/50 tracking-wider">
-            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">FULL-STACK 4K</span>
-            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">AI / ML CERTIFIED</span>
+            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">FLUTTER & DART</span>
+            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">KARACHI, PK</span>
           </div>
         </div>
 
@@ -194,34 +214,34 @@ const Hero = () => {
           <div className="lg:col-span-5 flex flex-col items-start space-y-5 text-left">
             
             <div className="hero-anim-item flex items-center gap-3">
-              <span className="px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest shadow-[0_0_20px_rgba(229,9,20,0.8)] animate-pulse">TOP 1%</span>
-              <span className="text-white/80 text-xs font-mono tracking-widest uppercase">Software Engineer & Problem Solver</span>
+              <span className="px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest shadow-[0_0_20px_rgba(229,9,20,0.8)] animate-pulse">NOW</span>
+              <span className="text-white/80 text-xs font-mono tracking-widest uppercase">Junior Flutter Developer at TeamX Pakistan</span>
             </div>
 
             <h1 className="hero-anim-item text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.95] drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
-              SUSHMITA <br />
+              MOIZ <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-700 drop-shadow-[0_0_35px_rgba(220,38,38,0.5)]">
-                DEV.ENGINE
+                JAWAD
               </span>
             </h1>
 
-            <div className="hero-anim-item flex items-center gap-3 text-xs font-mono text-red-400 font-bold">
-              <span className="px-2 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-red-500">99.9% Uptime</span>
+            <div className="hero-anim-item flex items-center gap-3 text-xs font-mono text-red-400 font-bold flex-wrap">
+              <span className="px-2 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-red-500">Karachi, Sindh</span>
               <span className="text-white/40">•</span>
-              <span>React • Node.js • PostgreSQL</span>
+              <span>Flutter • Dart • React</span>
               <span className="text-white/40">•</span>
-              <span className="text-white/70">Docker & Cloud</span>
+              <span className="text-white/70">Node.js • MongoDB • Supabase</span>
             </div>
 
             <p className="hero-anim-item text-sm md:text-base text-white/80 font-light leading-relaxed max-w-md drop-shadow">
-              Architecting robust full-stack systems, building scalable multi-tenant SaaS platforms, and engineering cutting-edge AI integrations.
+              Flutter and full-stack developer building scalable mobile and web applications, with React on the front end and Node.js, Express, MongoDB, and Supabase on the back end.
             </p>
 
             {/* Action Button Set */}
-            <div className="hero-anim-item flex items-center gap-4 pt-2">
+            <div className="hero-anim-item flex flex-wrap items-center gap-4 pt-2">
               <a
                 href="#projects"
-                className="px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 shadow-[0_10px_35px_rgba(255,255,255,0.3)] flex items-center gap-2 hover:scale-105 active:scale-95"
+                className="min-h-11 px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 shadow-[0_10px_35px_rgba(255,255,255,0.3)] flex items-center gap-2 hover:scale-105 active:scale-95"
               >
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
@@ -230,7 +250,7 @@ const Hero = () => {
               </a>
               <a
                 href="#contact"
-                className="px-8 py-3.5 bg-neutral-900/80 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:bg-neutral-800 transition-all duration-300 shadow-xl backdrop-blur-md flex items-center gap-2 hover:scale-105 active:scale-95"
+                className="min-h-11 px-8 py-3.5 bg-neutral-900/80 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:bg-neutral-800 transition-all duration-300 shadow-xl backdrop-blur-md flex items-center gap-2 hover:scale-105 active:scale-95"
               >
                 <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" />
@@ -260,15 +280,15 @@ const Hero = () => {
                   className="absolute inset-[-50%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none transform-gpu z-40"
                 ></div>
 
-                {/* Netflix Series Tag */}
-                <div className="absolute top-6 left-6 z-30 px-3 py-1 bg-red-600 text-white font-mono text-[10px] font-bold tracking-widest rounded shadow-xl">
+                {/* Netflix Series Tag sits above the portrait so it cannot cover the head */}
+                <div className="relative z-30 mb-2 w-fit px-3 py-1 bg-red-600 text-white font-mono text-[10px] font-bold tracking-widest rounded shadow-xl">
                   FEATURED DEV
                 </div>
 
                 <img
                   src={pictureImg}
-                  alt="Developer Portrait"
-                  className="w-full h-[330px] md:h-[390px] object-cover rounded-xl filter contrast-125 brightness-105 group-hover:scale-[1.02] transition-transform duration-500"
+                  alt="Moiz Jawad"
+                  className="w-full h-[330px] md:h-[390px] object-cover object-top rounded-xl filter contrast-125 brightness-105"
                 />
               </div>
             </div>
@@ -277,9 +297,9 @@ const Hero = () => {
           {/* Right Side: Technical Specs & Stack */}
           <div className="hero-anim-item lg:col-span-3 flex flex-col items-start lg:items-end space-y-4 text-left lg:text-right">
             <div className="p-5 bg-black/80 backdrop-blur-2xl border border-white/15 rounded-xl shadow-2xl max-w-xs">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-2">Core Stack & Awards</h3>
+              <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-2">Now & Education</h3>
               <p className="text-xs text-white/80 leading-relaxed font-light">
-                Flipkart GRiD 7.0 Semi-Finalist, AlgoUniversity Tech Fellow, GitHub Foundations Certified.
+                Junior Flutter Developer at TeamX Pakistan. BS Computer Science, Quaid-e-Awam University of Engineering, Sciences and Technology, Nawabshah.
               </p>
             </div>
           </div>
@@ -288,7 +308,7 @@ const Hero = () => {
 
         {/* Bottom Cinematic Ticker */}
         <div className="hero-anim-item flex items-center justify-between text-xs font-mono text-white/50 tracking-widest uppercase">
-          <span>ENGINEERED FOR SCALABILITY</span>
+          <span>KARACHI, SINDH, PAKISTAN</span>
           <span>[ PORTFOLIO RELEASE v2.6 ]</span>
         </div>
       </div>
@@ -296,33 +316,55 @@ const Hero = () => {
       {/* 4. Ultra Pro Max Custom Precision Cursor Suite */}
       <div
         ref={cursorDotRef}
-        className="absolute top-0 left-0 z-50 pointer-events-none w-3 h-3 bg-red-600 rounded-full shadow-[0_0_15px_#E50914]"
+        className="hidden md:block absolute top-0 left-0 z-50 pointer-events-none w-3 h-3 bg-red-600 rounded-full shadow-[0_0_15px_#E50914]"
       ></div>
 
       <div
         ref={cursorRingRef}
-        className="absolute top-0 left-0 z-50 pointer-events-none w-12 h-12 border border-red-600/60 rounded-full flex items-center justify-center backdrop-blur-[1px]"
+        className="hidden md:block absolute top-0 left-0 z-50 pointer-events-none w-12 h-12 border border-red-600/60 rounded-full flex items-center justify-center backdrop-blur-[1px]"
       ></div>
 
       {/* --- NETFLIX-THEMED DEVELOPER NAVBAR --- */}
-      <header className="absolute top-0 left-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-12 py-6 flex items-center justify-between pointer-events-auto">
+      <header className="absolute top-0 left-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-12 py-4 md:py-6 flex items-center justify-between pointer-events-auto">
         <div className="text-2xl font-black text-red-600 tracking-tighter flex items-center gap-2 drop-shadow-[0_2px_15px_rgba(229,9,20,0.9)]">
-          SUSHMITA<span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
+          MOIZ<span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
         </div>
         <nav className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-white/80">
-          <a href="#home" className="hover:text-red-500 transition-colors">Home</a>
-          <a href="#about" className="hover:text-red-500 transition-colors">About</a>
-          <a href="#expertise" className="hover:text-red-500 transition-colors">Expertise</a>
-          <a href="#skills" className="hover:text-red-500 transition-colors">Skills</a>
-          <a href="#projects" className="hover:text-red-500 transition-colors">Projects</a>
-          <a href="#contact" className="hover:text-red-500 transition-colors">Contact</a>
+          {sectionLinks.map(([href, label]) => (
+            <a key={href} href={href} className="hover:text-red-500 transition-colors">{label}</a>
+          ))}
         </nav>
-        <a
-          href="#hire"
-          className="px-5 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-[0_0_20px_rgba(229,9,20,0.6)] hover:scale-105 active:scale-95"
-        >
-          Hire Me
-        </a>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="md:hidden min-h-11 min-w-11 px-3 rounded border border-white/20 text-[11px] font-mono uppercase tracking-widest text-white"
+            aria-expanded={menuOpen}
+            aria-label={menuOpen ? 'Close sections' : 'Open sections'}
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? 'Close' : 'Sections'}
+          </button>
+          <a
+            href="#hire"
+            className="min-h-11 inline-flex items-center px-5 rounded bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-[0_0_20px_rgba(229,9,20,0.6)] hover:scale-105 active:scale-95"
+          >
+            Hire Me
+          </a>
+        </div>
+        {menuOpen && (
+          <nav className="md:hidden absolute top-full left-6 right-6 mt-2 flex flex-col rounded-xl border border-white/15 bg-[#141414]/95 p-2 shadow-2xl">
+            {sectionLinks.map(([href, label]) => (
+              <a
+                key={href}
+                href={href}
+                className="min-h-11 flex items-center px-4 text-xs font-mono uppercase tracking-widest text-white/80 hover:text-red-500"
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </a>
+            ))}
+          </nav>
+        )}
       </header>
     </section>
   );
