@@ -107,10 +107,10 @@ const About = () => {
             <div className="space-y-5 relative z-10">
               <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold">Cast & Background</h3>
               <p className="text-lg md:text-xl font-medium text-white/90 leading-relaxed break-words">
-                I am <span className="text-white font-bold drop-shadow">Moiz Jawad</span>, a Flutter and full-stack developer in Karachi, Sindh, Pakistan, and a BS Computer Science graduate of Quaid-e-Awam University of Engineering, Sciences and Technology, Nawabshah.
+                I am <span className="text-white font-bold drop-shadow">Moiz Jawad</span>, a Flutter and full-stack developer in Karachi, Sindh, Pakistan, and a BS Computer Science graduate of Quaid-e-Awam University of Engineering, Sciences and Technology, Nawabshah (CGPA 3.47).
               </p>
               <p className="text-sm md:text-base text-white/60 font-light leading-relaxed">
-                Experienced in building scalable mobile and web applications. Skilled in Flutter and React, with hands-on work in React, Redux, Vite, Tailwind CSS, shadcn/ui, Node.js, Express.js, MongoDB, and Supabase. Also experienced in REST APIs, authentication, real-time systems, Google Maps, and AI integrations.
+                Higher Secondary Certificate (Part-II), Mazhar Muslim M H/Sec School Ranipur, Annual Examination 2021 — 96%. Experienced in building scalable mobile and web applications with Flutter, React, Node.js, Express.js, MongoDB, and Supabase.
               </p>
             </div>
             
@@ -155,7 +155,11 @@ const About = () => {
                 </li>
                 <li className="flex items-start gap-2.5">
                   <span className="text-red-500 font-bold">&#8250;</span>
-                  <span>Udemy: React Complete Developer Course, Node.js Practical Project, The Complete JavaScript Course, Complete Flutter Guide 2024, Dart & Flutter, and Dart Mastery.</span>
+                  <span>Co-Director of Photography, Quaid-e-Awam University Engineer&apos;s Social Society — event photography and media coverage.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="text-red-500 font-bold">&#8250;</span>
+                  <span>Certificates: Dart/Flutter Bootcamp, Firebase for Flutter, Google Mobile Ads, JavaScript Essentials, Node.js &amp; Express.js Mastery, React JS Development.</span>
                 </li>
               </ul>
             </div>

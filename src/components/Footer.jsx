@@ -30,6 +30,26 @@ const Footer = () => {
         {/* Middle Section: Socials & External Profiles */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 text-xs font-mono text-white/60">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            <a
+              href="mailto:moizjawaad@gmail.com"
+              className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors uppercase tracking-wider"
+            >
+              Email //
+            </a>
+            <a
+              href="tel:+923035414205"
+              className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors uppercase tracking-wider"
+            >
+              Phone //
+            </a>
+            <a
+              href="https://moizjawad.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors uppercase tracking-wider"
+            >
+              Site //
+            </a>
             <a 
               href="https://github.com/Moiz-jawad" 
               target="_blank" 

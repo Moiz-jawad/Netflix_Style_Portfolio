@@ -1,8 +1,15 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import emailjs from '@emailjs/browser';
+
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_AUTO_REPLY_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID;
 
 const Contact = () => {
   const ref = useRef(null);
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
   
   // React Form State tracking
   const [formData, setFormData] = useState({
@@ -24,25 +31,65 @@ const Contact = () => {
   // Handle input changes dynamically
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
+    setStatus('idle');
     setFormData((prev) => ({
       ...prev,
       [id]: type === 'checkbox' ? checked : value
     }));
   };
 
-  // Handle form submission logic
-  const handleSubmit = (e) => {
+  // Handle form submission via EmailJS
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!formData.permission) {
-      alert("Please accept the contact permission checkbox.");
+      alert('Please accept the contact permission checkbox.');
       return;
     }
 
-    console.log("Form Data Submitted Successfully:", formData);
-    alert(`Thanks ${formData.firstName}! Message captured successfully.`);
-    
-    setFormData({ firstName: '', lastName: '', email: '', message: '', permission: false });
+    if (!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID) {
+      setStatus('error');
+      return;
+    }
+
+    // Required EmailJS vars: name, email, message, title, time, reply_to (see specs/009 data-model)
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const templateParams = {
+      name: fullName,
+      title: `Portfolio message from ${fullName}`,
+      email: formData.email,
+      message: formData.message,
+      reply_to: formData.email,
+      time: new Date().toLocaleString(),
+      // Optional aliases — templates must not depend on these alone
+      from_name: fullName,
+      from_email: formData.email,
+    };
+
+    const options = { publicKey: EMAILJS_PUBLIC_KEY };
+
+    setStatus('sending');
+
+    try {
+      // 1) Owner notification (Contact Us — template_nzzy4vt)
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, options);
+
+      // 2) Visitor acknowledgement (Auto-Reply — To Email must be {{email}} in dashboard)
+      if (EMAILJS_AUTO_REPLY_TEMPLATE_ID) {
+        await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_AUTO_REPLY_TEMPLATE_ID,
+          templateParams,
+          options
+        );
+      }
+
+      setStatus('success');
+      setFormData({ firstName: '', lastName: '', email: '', message: '', permission: false });
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      setStatus('error');
+    }
   };
 
   return (
@@ -86,6 +133,23 @@ const Contact = () => {
             <span className="text-xs font-mono text-white/40 tracking-wider hidden md:block">
               // LET'S BUILD SOMETHING CINEMATIC
             </span>
+          </div>
+
+          <div className="flex flex-wrap gap-x-5 gap-y-2 mb-10 md:mb-12 text-xs font-mono uppercase tracking-wider text-white/70">
+            <a href="mailto:moizjawaad@gmail.com" className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors">
+              moizjawaad@gmail.com
+            </a>
+            <a href="tel:+923035414205" className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors">
+              +92 3035414205
+            </a>
+            <a
+              href="https://moizjawad.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-h-11 inline-flex items-center hover:text-red-500 transition-colors"
+            >
+              moizjawad.dev
+            </a>
           </div>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-12 md:gap-16 w-full">
@@ -166,18 +230,33 @@ const Contact = () => {
                   This site is protected by security protocols and industry-standard privacy guidelines.
                 </p>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6">
-                  <p className="max-w-[250px] leading-relaxed">
-                    Ready to start a project or collaboration? Send a direct signal.
-                  </p>
+                  <div className="max-w-[250px] space-y-2">
+                    <p className="leading-relaxed">
+                      Ready to start a project or collaboration? Send a direct signal.
+                    </p>
+                    {status === 'success' && (
+                      <p className="text-green-400 text-xs tracking-wide" role="status">
+                        Message sent. I&apos;ll get back to you soon.
+                      </p>
+                    )}
+                    {status === 'error' && (
+                      <p className="text-red-400 text-xs tracking-wide" role="alert">
+                        Couldn&apos;t send right now. Try again or email me directly.
+                      </p>
+                    )}
+                  </div>
                   
                   <button 
-                    type="submit" 
-                    className="min-h-11 px-8 py-3.5 rounded bg-red-600 text-white font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-red-700 transition-all duration-300 group whitespace-nowrap shadow-[0_0_20px_rgba(229,9,20,0.6)] hover:scale-105"
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="min-h-11 px-8 py-3.5 rounded bg-red-600 text-white font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-red-700 transition-all duration-300 group whitespace-nowrap shadow-[0_0_20px_rgba(229,9,20,0.6)] hover:scale-105 disabled:opacity-60 disabled:hover:scale-100 disabled:cursor-not-allowed"
                   >
-                    Send Message
-                    <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    {status === 'sending' ? 'Sending…' : 'Send Message'}
+                    {status !== 'sending' && (
+                      <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    )}
                   </button>
                 </div>
               </div>

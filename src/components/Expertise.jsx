@@ -25,13 +25,6 @@ const expertiseData = [
     text: "Android Developer, Jun 2025 – Sep 2025, Islamabad. Built cross-platform applications with Flutter and Dart, implemented real-time syncing and offline-safe commands with Supabase, and developed modular UI components that reduced frontend development time by 40%.",
     tag: "ANDROID · FLUTTER",
     gradient: "from-[#220a0d] via-[#131313] to-[#0a0a0a]"
-  },
-  {
-    number: "04",
-    title: "Flutter Developer, DEN",
-    text: "Flutter Developer at Digital Empowerment Network, Sep 2025, Islamabad. Engineering and Technical department, Specialist level.",
-    tag: "SEP 2025",
-    gradient: "from-[#1d090b] via-[#101010] to-[#080808]"
   }
 ];
 

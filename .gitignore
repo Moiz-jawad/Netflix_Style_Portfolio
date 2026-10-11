@@ -3,6 +3,10 @@ dist/
 build/
 *.log
 .env*
+!.env.example
+*.md
+*.html
+.specify/feature.json
 .DS_Store
 Thumbs.db
 *.tmp

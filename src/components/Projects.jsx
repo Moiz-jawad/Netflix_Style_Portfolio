@@ -4,49 +4,140 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Authentic Project Data based on your engineering portfolio
+// Public repositories from https://github.com/Moiz-jawad (static; factual copy only)
 const projectsData = [
   {
-    title: "Shop App",
-    category: "Flutter · E-commerce",
-    description: "E-commerce mobile app with product listing and details, shopping cart, login and signup, favorites, Provider state management, and a responsive layout. Stack: Flutter/Dart, Firebase or REST API, Provider, Git.",
-    tags: ["Flutter", "Dart", "Provider", "Firebase"],
-    meta: "LinkedIn Project",
-    episode: "S01 E01"
+    title: "Personal Portfolio",
+    category: "JavaScript · Web",
+    description: "Interactive portfolio site for full-stack work, including immersive 3D web experiences.",
+    tags: ["JavaScript", "React", "Three.js"],
+    meta: "GitHub",
+    episode: "S01 E01",
+    repoUrl: "https://github.com/Moiz-jawad/personal-portfolio",
   },
   {
-    title: "TeamX Pakistan",
-    category: "Junior Flutter Developer",
-    description: "Apr 2026 – Present, Karachi. Cross-platform Flutter and Dart apps, REST API integration, third-party packages, code reviews, CI/CD, and Agile.",
-    tags: ["Flutter", "Dart", "REST APIs", "CI/CD"],
-    meta: "Current",
-    episode: "S01 E02"
+    title: "Cloud Book",
+    category: "JavaScript · Full stack",
+    description: "Notes app with sign-up, login, and create, edit, and delete notes. React and Bootstrap front end with a back end.",
+    tags: ["JavaScript", "React", "Bootstrap"],
+    meta: "GitHub",
+    episode: "S01 E02",
+    repoUrl: "https://github.com/Moiz-jawad/cloud-book",
   },
   {
-    title: "Qonkar Technologies",
-    category: "Associate Software Developer",
-    description: "Sep 16 – Dec 15, 2025, Nawabshah. Front-end internship on real-world web projects.",
-    tags: ["Web", "Front End", "Internship"],
-    meta: "Sep 2025 – Dec 2025",
-    episode: "S01 E03"
+    title: "Blog RESTful API",
+    category: "JavaScript · API",
+    description: "RESTful API for a blog platform with JWT authentication and role-based access. Node.js, Express, and MongoDB.",
+    tags: ["JavaScript", "Node.js", "Express", "MongoDB"],
+    meta: "GitHub",
+    episode: "S01 E03",
+    repoUrl: "https://github.com/Moiz-jawad/blog-restful-API",
   },
   {
-    title: "DEN Android",
-    category: "Android Developer",
-    description: "Jun 2025 – Sep 2025, Islamabad. Flutter and Dart apps, Supabase real-time sync and offline-safe commands, modular UI that cut frontend time by 40%.",
-    tags: ["Flutter", "Supabase", "UI/UX"],
-    meta: "Jun 2025 – Sep 2025",
-    episode: "S01 E04"
+    title: "PixiFusion",
+    category: "Node.js · Tools",
+    description: "Node.js and Express service for PDF merging and basic image tools such as enhancement and background removal.",
+    tags: ["Node.js", "Express"],
+    meta: "GitHub",
+    episode: "S01 E04",
+    repoUrl: "https://github.com/Moiz-jawad/PixiFusion",
   },
   {
-    title: "DEN Flutter",
-    category: "Flutter Developer",
-    description: "Sep 2025, Islamabad. Engineering and Technical department, Specialist level.",
-    tags: ["Flutter", "Islamabad"],
-    meta: "Sep 2025",
-    episode: "S01 E05"
-  }
+    title: "DEN Internship",
+    category: "Dart · Flutter",
+    description: "Flutter productivity suite from the DEN internship, with three Flutter-based projects.",
+    tags: ["Dart", "Flutter"],
+    meta: "GitHub",
+    episode: "S01 E05",
+    repoUrl: "https://github.com/Moiz-jawad/DEN-INTERNSHIP",
+  },
+  {
+    title: "Mobile Shop",
+    category: "Dart · Flutter",
+    description: "Flutter mobile shop management system project.",
+    tags: ["Dart", "Flutter"],
+    meta: "GitHub",
+    episode: "S01 E06",
+    repoUrl: "https://github.com/Moiz-jawad/mobile-shop",
+  },
+  {
+    title: "News App",
+    category: "JavaScript · Web",
+    description: "React web app started with Create React App.",
+    tags: ["JavaScript", "React"],
+    meta: "GitHub",
+    episode: "S01 E07",
+    repoUrl: "https://github.com/Moiz-jawad/news-app",
+  },
+  {
+    title: "Streamora",
+    category: "JavaScript · Web",
+    description: "React and Vite project with hot module reload and ESLint setup.",
+    tags: ["JavaScript", "React", "Vite"],
+    meta: "GitHub",
+    episode: "S01 E08",
+    repoUrl: "https://github.com/Moiz-jawad/streamora",
+  },
+  {
+    title: "Jan Muhammad",
+    category: "JavaScript · Web",
+    description: "React and Vite project with hot module reload and ESLint setup.",
+    tags: ["JavaScript", "React", "Vite"],
+    meta: "GitHub",
+    episode: "S01 E09",
+    repoUrl: "https://github.com/Moiz-jawad/Jan-Muhammad",
+  },
+  {
+    title: "Hacking Simulation",
+    category: "JavaScript · Web",
+    description: "Hacking simulation project in JavaScript.",
+    tags: ["JavaScript"],
+    meta: "GitHub",
+    episode: "S01 E10",
+    repoUrl: "https://github.com/Moiz-jawad/hacking_simulation",
+  },
 ];
+
+const projectCardShellClass =
+  "block w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414]/95 backdrop-blur-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9)] transition-all duration-500 group hover:scale-[1.04] hover:border-red-600 hover:shadow-[0_35px_80px_rgba(229,9,20,0.35)] hover:-translate-y-2 relative z-10 p-7 flex flex-col justify-between";
+
+const projectCardMobileClass =
+  "block w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414] p-6 flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.9)]";
+
+function ProjectCardBody({ project }) {
+  return (
+    <>
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-red-500 bg-red-600/10 px-2.5 py-1 rounded border border-red-600/20">
+          {project.episode}
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
+          <span className="text-[10px] font-mono border border-white/30 px-1 text-white/70">HD</span>
+        </div>
+      </div>
+      <div className="space-y-2 my-auto">
+        <div className="text-[11px] font-mono uppercase tracking-widest text-white/40">
+          {project.category}
+        </div>
+        <h3 className="text-2xl font-black text-white tracking-tight group-hover:text-red-500 transition-colors duration-300">
+          {project.title}
+        </h3>
+        <p className="text-xs text-white/70 font-light leading-relaxed line-clamp-2">
+          {project.description}
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
+        {project.tags.map((tag, tIdx) => (
+          <span key={tIdx} className="text-[10px] font-mono text-white/70 bg-white/5 px-2 py-0.5 rounded group-hover:border-red-600/30 transition-colors">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <div className="absolute bottom-4 right-4 w-2 h-2 rounded-full bg-red-600 group-hover:shadow-[0_0_15px_#E50914] transition-all" />
+    </>
+  );
+}
 
 const Projects = () => {
   const containerRef = useRef(null);
@@ -184,7 +275,7 @@ const Projects = () => {
   }, []);
 
   return (
-    <section id="projects" ref={containerRef} className="bg-[#0b0b0b] min-h-0 md:min-h-[170vh] relative font-sans overflow-x-clip text-white w-full flex flex-col items-center justify-center py-16 md:py-40 select-none">
+    <section id="projects" ref={containerRef} className="bg-[#0b0b0b] min-h-0 md:min-h-[240vh] relative font-sans overflow-x-clip text-white w-full flex flex-col items-center justify-center py-16 md:py-40 select-none">
       
       {/* Background Netflix Cinematic Title Watermark */}
       <div className="absolute top-10 left-0 w-full flex items-start justify-center pointer-events-none z-0">
@@ -222,44 +313,24 @@ const Projects = () => {
               className="hidden md:block absolute w-[80vw] md:w-[33vw] max-w-[380px] aspect-[16/10] will-change-transform"
               style={{ zIndex: 10 + i }}
             >
-              <div className="w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414]/95 backdrop-blur-2xl shadow-[0_25px_50px_rgba(0,0,0,0.9)] transition-all duration-500 group hover:scale-[1.04] hover:border-red-600 hover:shadow-[0_35px_80px_rgba(229,9,20,0.35)] hover:-translate-y-2 cursor-pointer relative z-10 p-7 flex flex-col justify-between">
-                
-                {/* Top Card Header */}
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-red-500 bg-red-600/10 px-2.5 py-1 rounded border border-red-600/20">
-                    {project.episode}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
-                    <span className="text-[10px] font-mono border border-white/30 px-1 text-white/70">HD</span>
-                  </div>
+              {project.repoUrl ? (
+                <a
+                  href={project.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${project.title} on GitHub`}
+                  className={`${projectCardShellClass} cursor-pointer`}
+                >
+                  <ProjectCardBody project={project} />
+                </a>
+              ) : (
+                <div
+                  className={projectCardShellClass}
+                  aria-label={`${project.title} (no public repository)`}
+                >
+                  <ProjectCardBody project={project} />
                 </div>
-
-                {/* Middle Title & Description */}
-                <div className="space-y-2 my-auto">
-                  <div className="text-[11px] font-mono uppercase tracking-widest text-white/40">
-                    {project.category}
-                  </div>
-                  <h3 className="text-2xl font-black text-white tracking-tight group-hover:text-red-500 transition-colors duration-300">
-                    {project.title}
-                  </h3>
-                  <p className="text-xs text-white/70 font-light leading-relaxed line-clamp-2">
-                    {project.description}
-                  </p>
-                </div>
-
-                {/* Bottom Tech Tags */}
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/10">
-                  {project.tags.map((tag, tIdx) => (
-                    <span key={tIdx} className="text-[10px] font-mono text-white/70 bg-white/5 px-2 py-0.5 rounded group-hover:border-red-600/30 transition-colors">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Red Glowing Corner Accent */}
-                <div className="absolute bottom-4 right-4 w-2 h-2 rounded-full bg-red-600 group-hover:shadow-[0_0_15px_#E50914] transition-all" />
-              </div>
+              )}
             </div>
           ))}
 
@@ -292,25 +363,56 @@ const Projects = () => {
             ref={el => mobileCardsRef.current[i] = el}
             className="shrink-0 w-[calc(100vw-3.5rem)] max-w-[340px] min-h-[220px] snap-center will-change-transform relative z-10"
           >
-            <div className="w-full h-full rounded-[24px] overflow-hidden border border-white/15 bg-[#141414] p-6 flex flex-col justify-between shadow-[0_20px_40px_rgba(0,0,0,0.9)]">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold tracking-widest text-red-500 bg-red-600/10 px-2 py-0.5 rounded">
-                  {project.episode}
-                </span>
-                <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-xl font-black text-white">{project.title}</h3>
-                <p className="text-xs text-white/70 font-light break-words">{project.description}</p>
-              </div>
-              <div className="flex flex-wrap gap-1 pt-2 border-t border-white/10">
-                {project.tags.slice(0, 3).map((tag, tIdx) => (
-                  <span key={tIdx} className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded">
-                    {tag}
+            {project.repoUrl ? (
+              <a
+                href={project.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${project.title} on GitHub`}
+                className={projectCardMobileClass}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-red-500 bg-red-600/10 px-2 py-0.5 rounded">
+                    {project.episode}
                   </span>
-                ))}
+                  <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-black text-white">{project.title}</h3>
+                  <p className="text-xs text-white/70 font-light break-words">{project.description}</p>
+                </div>
+                <div className="flex flex-wrap gap-1 pt-2 border-t border-white/10">
+                  {project.tags.slice(0, 3).map((tag, tIdx) => (
+                    <span key={tIdx} className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            ) : (
+              <div
+                className={projectCardMobileClass}
+                aria-label={`${project.title} (no public repository)`}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-red-500 bg-red-600/10 px-2 py-0.5 rounded">
+                    {project.episode}
+                  </span>
+                  <span className="text-xs font-mono text-red-400 font-bold">{project.meta}</span>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-black text-white">{project.title}</h3>
+                  <p className="text-xs text-white/70 font-light break-words">{project.description}</p>
+                </div>
+                <div className="flex flex-wrap gap-1 pt-2 border-t border-white/10">
+                  {project.tags.slice(0, 3).map((tag, tIdx) => (
+                    <span key={tIdx} className="text-[10px] font-mono text-white/60 bg-white/5 px-2 py-0.5 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
