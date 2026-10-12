@@ -15,6 +15,8 @@ const EMAILJS_AUTO_REPLY_TEMPLATE_ID =
 
 const Contact = () => {
   const ref = useRef(null);
+  // FR-012: ref blocks double-submit races before React re-renders disabled=true
+  const sendingRef = useRef(false);
   const [status, setStatus] = useState('idle'); // idle | sending | success | error
   
   // React Form State tracking
@@ -48,6 +50,9 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Ignore further submits while a pair is in flight (FR-012)
+    if (sendingRef.current) return;
+
     if (!formData.permission) {
       alert('Please accept the contact permission checkbox.');
       return;
@@ -74,13 +79,14 @@ const Contact = () => {
 
     const options = { publicKey: EMAILJS_PUBLIC_KEY };
 
+    sendingRef.current = true;
     setStatus('sending');
 
     try {
-      // 1) Owner notification (Contact Us — template_nzzy4vt)
+      // Site-only pair (FR-009 / FR-011): exactly one Contact Us, then exactly one Auto-Reply.
+      // Do not add a third send. Contact Us dashboard Auto-Reply must stay unlinked.
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, options);
 
-      // 2) Visitor acknowledgement (Auto-Reply — To Email must be {{email}} in dashboard)
       if (EMAILJS_AUTO_REPLY_TEMPLATE_ID) {
         await emailjs.send(
           EMAILJS_SERVICE_ID,
@@ -95,6 +101,8 @@ const Contact = () => {
     } catch (err) {
       console.error('EmailJS error:', err);
       setStatus('error');
+    } finally {
+      sendingRef.current = false;
     }
   };
 
