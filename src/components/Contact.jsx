@@ -10,12 +10,12 @@ const EMAILJS_SERVICE_ID =
   import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_u9ces18';
 const EMAILJS_TEMPLATE_ID =
   import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_nzzy4vt';
-const EMAILJS_AUTO_REPLY_TEMPLATE_ID =
-  import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID || 'template_2441ggp';
+// Auto-Reply is sent by EmailJS when linked on Contact Us (dashboard Auto-Reply tab).
+// Do NOT also call emailjs.send for template_2441ggp — that stacked with the link and caused 4 emails.
 
 const Contact = () => {
   const ref = useRef(null);
-  // FR-012: ref blocks double-submit races before React re-renders disabled=true
+  // Blocks double-submit before React re-renders disabled=true
   const sendingRef = useRef(false);
   const [status, setStatus] = useState('idle'); // idle | sending | success | error
   
@@ -83,18 +83,8 @@ const Contact = () => {
     setStatus('sending');
 
     try {
-      // Site-only pair (FR-009 / FR-011): exactly one Contact Us, then exactly one Auto-Reply.
-      // Do not add a third send. Contact Us dashboard Auto-Reply must stay unlinked.
+      // One send only. EmailJS delivers Contact Us + linked Auto-Reply (dashboard).
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, options);
-
-      if (EMAILJS_AUTO_REPLY_TEMPLATE_ID) {
-        await emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_AUTO_REPLY_TEMPLATE_ID,
-          templateParams,
-          options
-        );
-      }
 
       setStatus('success');
       setFormData({ firstName: '', lastName: '', email: '', message: '', permission: false });
