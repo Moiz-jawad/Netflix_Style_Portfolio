@@ -2,10 +2,16 @@ import React, { useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-const EMAILJS_AUTO_REPLY_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID;
+// Public EmailJS IDs (safe in the client). Env overrides when set at build time (e.g. Render).
+// Production broke when VITE_* vars were missing from the host build — defaults keep mail working.
+const EMAILJS_PUBLIC_KEY =
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'LhJ13t4vZppKNjVWS';
+const EMAILJS_SERVICE_ID =
+  import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_u9ces18';
+const EMAILJS_TEMPLATE_ID =
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_nzzy4vt';
+const EMAILJS_AUTO_REPLY_TEMPLATE_ID =
+  import.meta.env.VITE_EMAILJS_AUTO_REPLY_TEMPLATE_ID || 'template_2441ggp';
 
 const Contact = () => {
   const ref = useRef(null);
