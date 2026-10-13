@@ -8,6 +8,10 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Page-wide Lenis smooth scroll, synced with GSAP ScrollTrigger.
  * Keep the tree mounted; only start/stop Lenis so sections do not remount.
+ *
+ * Phone notes (011-mobile-motion-parity):
+ * - syncTouch stays false so native touch scrolling drives pins/scrubs predictably.
+ * - Orientation / visualViewport changes refresh ScrollTrigger for phone pin sections.
  */
 const SmoothScroll = ({ children, enabled = true }) => {
   const lenisRef = useRef(null);
@@ -52,11 +56,19 @@ const SmoothScroll = ({ children, enabled = true }) => {
     syncEnabled();
 
     const onReduceChange = () => syncEnabled();
+    const onViewportChange = () => {
+      ScrollTrigger.refresh();
+    };
+
     reduce.addEventListener('change', onReduceChange);
+    window.addEventListener('orientationchange', onViewportChange);
+    window.visualViewport?.addEventListener('resize', onViewportChange);
 
     return () => {
       window.clearTimeout(timer);
       reduce.removeEventListener('change', onReduceChange);
+      window.removeEventListener('orientationchange', onViewportChange);
+      window.visualViewport?.removeEventListener('resize', onViewportChange);
       gsap.ticker.remove(update);
       const lenis = lenisRef.current?.lenis;
       if (lenis) lenis.off('scroll', ScrollTrigger.update);
@@ -71,6 +83,7 @@ const SmoothScroll = ({ children, enabled = true }) => {
         autoRaf: false,
         lerp: 0.075,
         smoothWheel: true,
+        // Native touch scroll — better with phone ScrollTrigger pins (research.md).
         syncTouch: false,
         wheelMultiplier: 0.9,
         touchMultiplier: 1.1,

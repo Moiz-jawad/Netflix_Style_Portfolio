@@ -135,8 +135,8 @@ function JourneyStill({ item, placement = 'top' }) {
     <div
       className={`overflow-hidden rounded-[0.6vw] border border-white/15 shadow-[0_12px_40px_rgba(0,0,0,0.55)] ring-1 ring-red-600/25 max-[600px]:rounded-[3vw] ${
         placement === 'top'
-          ? 'mt-[1.2vw] h-[9vw] w-[78%] max-[600px]:mt-[4vw] max-[600px]:h-[36vw] max-[600px]:w-[90%]'
-          : 'mb-[1.2vw] h-[8vw] w-[78%] max-[600px]:mb-[4vw] max-[600px]:h-[34vw] max-[600px]:w-[90%]'
+          ? 'mt-[1.2vw] h-[9vw] w-[78%] max-[600px]:mt-[3.5vw] max-[600px]:h-[min(32vw,140px)] max-[600px]:w-[90%]'
+          : 'mb-[1.2vw] h-[8vw] w-[78%] max-[600px]:mb-[3.5vw] max-[600px]:h-[min(30vw,128px)] max-[600px]:w-[90%]'
       }`}
     >
       <img
@@ -144,6 +144,7 @@ function JourneyStill({ item, placement = 'top' }) {
         alt={item.imageAlt || `${item.month} ${item.year}`}
         draggable={false}
         loading="lazy"
+        decoding="async"
         className="h-full w-full object-cover"
       />
     </div>
@@ -187,9 +188,10 @@ export default function Timeline({
       const slider = wholeSliderRef.current;
       if (!section || !slider) return;
 
-      const isMobile = window.innerWidth < 600;
-      const slidePercent = isMobile ? -57 : -65;
-      const lineWidth = isMobile ? '65%' : '98%';
+      const compactMq = window.matchMedia('(max-width: 599px)');
+      const isMobile = () => compactMq.matches;
+      const slidePercent = () => (isMobile() ? -57 : -65);
+      const lineWidth = () => (isMobile() ? '65%' : '98%');
       const items = allJourneyItems;
 
       // One scrubbed timeline: progress is 0 when the section first pins
@@ -199,7 +201,7 @@ export default function Timeline({
 
       if (reducedMotion) {
         gsap.set(slider, { xPercent: 0 });
-        gsap.set('.journey-line', { width: lineWidth });
+        gsap.set('.journey-line', { width: lineWidth() });
         items.forEach((item) => {
           gsap.set(`.jl-${item.id}`, { scaleY: 1 });
           gsap.set(`.jd-${item.id}`, { scale: 1 });
@@ -242,14 +244,14 @@ export default function Timeline({
       tl.fromTo(
         slider,
         { xPercent: 0 },
-        { xPercent: slidePercent, duration: 1, ease: 'none' },
+        { xPercent: () => slidePercent(), duration: 1, ease: 'none' },
         0,
       );
 
       tl.fromTo(
         '.journey-line',
         { width: '0%' },
-        { width: lineWidth, duration: 0.95, ease: 'none' },
+        { width: () => lineWidth(), duration: 0.95, ease: 'none' },
         0.05,
       );
 
@@ -274,10 +276,14 @@ export default function Timeline({
         ScrollTrigger.refresh();
       };
       window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+      window.visualViewport?.addEventListener('resize', handleResize);
       requestAnimationFrame(() => ScrollTrigger.refresh());
 
       return () => {
         window.removeEventListener('resize', handleResize);
+        window.removeEventListener('orientationchange', handleResize);
+        window.visualViewport?.removeEventListener('resize', handleResize);
       };
     },
     {
@@ -293,22 +299,35 @@ export default function Timeline({
       className="h-[320vh] max-[600px]:h-[380vh] w-full relative select-none"
       style={sectionStyle}
     >
-      <div className="h-screen w-screen sticky top-[0%] pt-[11%] overflow-hidden max-[600px]:top-[5%] max-[600px]:pt-[8%]">
+      <div className="h-screen w-screen sticky top-0 flex flex-col pt-[11%] overflow-hidden max-[600px]:pt-4 max-[600px]:pb-4">
+        {/* Phone: keep Episode / title pinned at the top of the sticky frame */}
+        <div className="relative z-20 hidden max-[600px]:block shrink-0 px-5 pb-3">
+          <p className="mb-1.5 font-mono text-[11px] uppercase tracking-[0.25em] text-red-500">
+            Episode 02 // Expertise
+          </p>
+          <h2 className="font-black text-[8vw] leading-[1.05] tracking-tight text-balance">
+            {title}
+          </h2>
+          <p className="mt-1 font-mono text-[11px] uppercase tracking-widest" style={mutedTextStyle}>
+            {periodLabel}
+          </p>
+        </div>
+
         <div
           ref={wholeSliderRef}
-          className="mr-[2vw] flex h-[30vw] w-[248vw] items-center gap-[6.5vw] px-[6vw] max-[600px]:h-[80vh] max-[600px]:w-[820vw] max-[600px]:gap-[8vw] max-[600px]:px-[8vw]"
+          className="mr-[2vw] flex h-[30vw] w-[248vw] items-center gap-[6.5vw] px-[6vw] max-[600px]:h-auto max-[600px]:min-h-0 max-[600px]:flex-1 max-[600px]:w-[820vw] max-[600px]:items-start max-[600px]:gap-[8vw] max-[600px]:px-[5vw]"
         >
-          <div className="h-full w-[30vw] overflow-hidden rounded-[1vw] border border-white/10 shadow-[0_0_40px_rgba(229,9,20,0.15)] max-[600px]:h-[65vw] max-[600px]:w-[85vw] max-[600px]:rounded-[5vw]">
+          <div className="h-full w-[30vw] shrink-0 overflow-hidden rounded-[1vw] border border-white/10 shadow-[0_0_40px_rgba(229,9,20,0.15)] max-[600px]:h-[min(52vw,240px)] max-[600px]:w-[82vw] max-[600px]:rounded-[4vw]">
             <img
               src={imageUrl}
               alt={imageAlt}
               draggable={false}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-top"
             />
           </div>
 
-          <div className="relative h-full w-full">
-            <div className="w-full absolute left-0 top-[49%] -translate-y-1/2 flex items-center h-fit">
+          <div className="relative h-full w-full max-[600px]:min-h-[70vw]">
+            <div className="w-full absolute left-0 top-[49%] -translate-y-1/2 flex items-center h-fit max-[600px]:top-[40%]">
               <div
                 className="h-[0.8vw] max-[600px]:h-[2vw] max-[600px]:w-[2vw] w-[0.8vw] rounded-full shadow-[0_0_12px_rgba(229,9,20,0.8)]"
                 style={activeStyle}
@@ -320,15 +339,17 @@ export default function Timeline({
               />
             </div>
 
-            <div className="flex h-1/2 w-full items-center justify-start gap-[1.25vw]">
-              <div className="h-full w-[20%] pt-[2.5vw] max-[600px]:h-fit max-[600px]:pt-[5vw]">
-                <p className="mb-3 font-mono text-[0.7vw] uppercase tracking-[0.25em] text-red-500 max-[600px]:mb-2 max-[600px]:text-[2.8vw]">
+            <div className="flex h-1/2 w-full items-center justify-start gap-[1.25vw] max-[600px]:items-start">
+              <div className="h-full w-[20%] pt-[2.5vw] max-[600px]:hidden">
+                <p className="mb-3 font-mono text-[0.7vw] uppercase tracking-[0.25em] text-red-500">
                   Episode 02 // Expertise
                 </p>
-                <h2 className="w-[75%] font-black text-[2.6vw] leading-[1.05] tracking-tight max-[600px]:text-[8.5vw]">
+                <h2 className="w-[75%] font-black text-[2.6vw] leading-[1.05] tracking-tight">
                   {title}
                 </h2>
               </div>
+              {/* Spacer on phone so milestone columns still clear the left rail */}
+              <div className="hidden max-[600px]:block w-[8vw] shrink-0" aria-hidden="true" />
 
               <div className="w-full flex h-full gap-x-[17vw] max-[600px]:gap-x-[44vw]">
                 {topJourneyData.map((item) => (
@@ -354,7 +375,7 @@ export default function Timeline({
                         {item.year} {item.month}
                       </h4>
                       <p
-                        className={`description-${item.id} w-[90%] text-[1.35vw] font-light leading-[1.35] max-[600px]:w-[90%] max-[600px]:text-[4.8vw]`}
+                        className={`description-${item.id} w-[90%] text-[1.35vw] font-light leading-[1.35] max-[600px]:w-[90%] max-[600px]:text-[4.5vw] max-[600px]:line-clamp-4`}
                         style={mutedTextStyle}
                       >
                         {item.content}
@@ -369,14 +390,15 @@ export default function Timeline({
             </div>
 
             <div className="h-1/2 flex items-center justify-start w-full">
-              <div className="w-[34%] pt-[2vw] max-[600px]:pt-[5vw] max-[600px]:w-[30%] h-full">
+              <div className="w-[34%] pt-[2vw] max-[600px]:hidden h-full">
                 <p
-                  className="font-mono text-[1.4vw] uppercase tracking-widest leading-none max-[600px]:text-[4.2vw]"
+                  className="font-mono text-[1.4vw] uppercase tracking-widest leading-none"
                   style={mutedTextStyle}
                 >
                   {periodLabel}
                 </p>
               </div>
+              <div className="hidden max-[600px]:block w-[8vw] shrink-0" aria-hidden="true" />
 
               <div className="w-full flex h-full gap-x-[22vw] ml-[8vw] max-[600px]:gap-x-[44vw] max-[600px]:ml-[8vw]">
                 {bottomJourneyData.map((item) => (
@@ -405,7 +427,7 @@ export default function Timeline({
                         {item.year} {item.month}
                       </h4>
                       <p
-                        className={`description-${item.id} w-[90%] text-[1.35vw] font-light leading-[1.35] max-[600px]:w-[90%] max-[600px]:text-[4.8vw]`}
+                        className={`description-${item.id} w-[90%] text-[1.35vw] font-light leading-[1.35] max-[600px]:w-[90%] max-[600px]:text-[4.5vw] max-[600px]:line-clamp-4`}
                         style={mutedTextStyle}
                       >
                         {item.content}

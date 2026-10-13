@@ -298,7 +298,10 @@ export default function GlyphPortal({
       );
       H = motion.matches ? Math.min(viewportHeight * 0.75, 480) : viewportHeight;
       section.style.setProperty('--gp-height', `${H}px`);
-      travel = H * length;
+      // Short phones: clamp travel so zoom stays escapable (FR-007) while motion stays on.
+      const phoneShort = !motion.matches && window.matchMedia('(max-width: 767px)').matches && H < 700;
+      const travelLength = phoneShort ? Math.min(length, 1.75) : length;
+      travel = H * travelLength;
       art.setAttribute('viewBox', `0 0 ${W} ${H}`);
       if (fontDirty) {
         ready = readInk();

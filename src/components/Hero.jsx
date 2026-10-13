@@ -1,18 +1,30 @@
+import { useEffect, useState } from 'react';
 import picture from '../assets/Portfolio/picture.png';
 import GlyphPortal from './ui/glyph-portal';
 
 /**
  * Home entrance — Glyph Portal through "MOIZ" (Netflix-dark theme).
  * Scroll into the letter to reveal the intro stage.
+ * Phone (≤767px): shorter scrollLength so zoom stays escapable (FR-007).
  */
 const Hero = () => {
+  const [scrollLength, setScrollLength] = useState(2.2);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    const sync = () => setScrollLength(mq.matches ? 1.65 : 2.2);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
   return (
     <div id="home" className="relative w-full bg-[#050505]">
       <GlyphPortal
         word="MOIZ"
         focusChar="O"
         interactive
-        scrollLength={2.2}
+        scrollLength={scrollLength}
         fontWeight={900}
         fontFamily='Impact, Haettenschweiler, "Arial Black", "Helvetica Neue", Arial, sans-serif'
         enterLabel="Enter portfolio"
@@ -51,47 +63,42 @@ const Hero = () => {
                 Karachi, PK
               </span>
             </div>
-            <p className="absolute left-0 right-0 text-center text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-white/60"
+            <p
+              className="absolute left-0 right-0 text-center text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-white/60"
               style={{ top: 'calc(var(--gp-word-top, 35%) - 2.5rem)' }}
             >
               A different way into the story
-            </p>
-            <p className="absolute left-0 right-0 text-center text-sm text-white/50"
-              style={{ top: 'calc(var(--gp-word-bottom, 55%) + 1.5rem)' }}
-            >
-              Scroll through the name — or pick a letter
             </p>
           </>
         }
       >
         <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-3">
-              <span className="px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span className="shrink-0 whitespace-nowrap px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest">
                 NOW
               </span>
-              <span className="text-white/80 text-xs font-mono tracking-widest uppercase">
+              <span className="min-w-0 text-white/80 text-[10px] sm:text-xs font-mono tracking-wide sm:tracking-widest uppercase">
                 Junior Flutter Developer at TeamX Pakistan
               </span>
             </div>
             <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.95] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
-              MOIZ{' '}
-              <span className="text-white/95">JAWAD</span>
+              MOIZ <span className="text-white/95">JAWAD</span>
             </h2>
             <p className="text-sm md:text-base text-white/75 font-light leading-relaxed max-w-xl">
               Flutter and full-stack developer building scalable mobile and web applications, with
               React on the front end and Node.js, Express, MongoDB, and Supabase on the back end.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 relative z-10">
               <a
                 href="#projects"
-                className="min-h-11 px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
+                className="min-h-11 min-w-[44px] touch-manipulation px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 inline-flex items-center justify-center gap-2"
               >
                 View Projects
               </a>
               <a
                 href="#contact"
-                className="min-h-11 px-8 py-3.5 bg-neutral-900 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:border-red-600/50 transition-all duration-300 inline-flex items-center"
+                className="min-h-11 min-w-[44px] touch-manipulation px-8 py-3.5 bg-neutral-900 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:border-red-600/50 transition-all duration-300 inline-flex items-center justify-center"
               >
                 Contact Me
               </a>

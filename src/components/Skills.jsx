@@ -5,6 +5,15 @@ import FocusPullCarousel from './ui/focus-pull-carousel';
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * Skills focus rack — scroll-linked Focus Pull Carousel.
+ *
+ * Viewport bands (contracts/mobile-motion-parity.md):
+ * - Phone: max-width 767px → pin + scrub with shorter travel
+ * - Wide:  min-width 768px → pin + scrub with full travel
+ * Reduced motion: no pin/scrub; strip stays readable + swipeable.
+ */
+
 const U = (id) =>
   `https://images.unsplash.com/photo-${id}?q=80&w=1400&auto=format&fit=crop`;
 
@@ -62,7 +71,6 @@ const skillCategories = [
       'Node.js & Express',
       'React JS',
     ],
-    // Classic red theater seats — reads clearly under the Netflix overlay.
     image: U('1574267432553-4b4628081c31'),
     alt: 'Rows of red cinema seats in a dark theater',
   },
@@ -111,6 +119,23 @@ const slides = skillCategories.map((category, i) => ({
   ),
 }));
 
+function createSkillsScrub({ section, pin, carouselRef, stepHeightFactor }) {
+  const steps = Math.max(1, skillCategories.length - 1);
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top top',
+    end: () => `+=${steps * window.innerHeight * stepHeightFactor}`,
+    pin,
+    scrub: true,
+    anticipatePin: 1,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      carouselRef.current?.setProgress(self.progress);
+    },
+  });
+  requestAnimationFrame(() => carouselRef.current?.setProgress(0));
+}
+
 const Skills = () => {
   const sectionRef = useRef(null);
   const pinRef = useRef(null);
@@ -119,26 +144,36 @@ const Skills = () => {
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
+      const section = sectionRef.current;
+      const pin = pinRef.current;
 
+      // Wide: full travel. Phone: shorter steps so racks stay escapable (research.md).
       mm.add('(min-width: 768px) and (prefers-reduced-motion: no-preference)', () => {
-        const steps = Math.max(1, skillCategories.length - 1);
-
-        // Page scroll → horizontal strip 1:1 — same continuous focus pull as dragging.
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: () => `+=${steps * window.innerHeight * 0.95}`,
-          pin: pinRef.current,
-          scrub: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            carouselRef.current?.setProgress(self.progress);
-          },
+        createSkillsScrub({
+          section,
+          pin,
+          carouselRef,
+          stepHeightFactor: 0.95,
         });
-
-        requestAnimationFrame(() => carouselRef.current?.setProgress(0));
       });
+
+      mm.add('(max-width: 767px) and (prefers-reduced-motion: no-preference)', () => {
+        createSkillsScrub({
+          section,
+          pin,
+          carouselRef,
+          stepHeightFactor: 0.72,
+        });
+      });
+
+      const onViewportChange = () => ScrollTrigger.refresh();
+      window.addEventListener('orientationchange', onViewportChange);
+      window.visualViewport?.addEventListener('resize', onViewportChange);
+
+      return () => {
+        window.removeEventListener('orientationchange', onViewportChange);
+        window.visualViewport?.removeEventListener('resize', onViewportChange);
+      };
     }, sectionRef);
 
     return () => ctx.revert();
@@ -174,7 +209,7 @@ const Skills = () => {
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/55 md:text-base">
             Scroll to rack focus through each stack — the same curve, blur, and flatten as dragging the
-            strip. On phones, swipe.
+            strip. On phones, swipe the strip or keep scrolling.
           </p>
         </div>
 

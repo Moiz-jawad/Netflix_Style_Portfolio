@@ -191,7 +191,8 @@ const FP_CSS = [
   '.fp-track{display:flex;align-items:center;gap:clamp(18px,2.6vw,36px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding-inline:calc(50% - var(--fp-w) / 2);scrollbar-width:none;cursor:grab;touch-action:pan-x;transform-style:preserve-3d}',
   '.fp-track::-webkit-scrollbar{display:none}',
   ".fp-track[data-drag='1'],.fp-track[data-linked='1']{scroll-snap-type:none;cursor:grabbing}",
-  ".fp-track[data-linked='1']{cursor:default;touch-action:pan-y}",
+  /* Linked: page scroll drives progress; allow horizontal swipe as a complement on phones. */
+  ".fp-track[data-linked='1']{cursor:default;touch-action:pan-x pan-y}",
   '.fp-card{flex:0 0 var(--fp-w);aspect-ratio:var(--fp-aspect);max-height:calc(var(--fp-h) * .68);scroll-snap-align:center;position:relative;border:0;padding:0;margin:0;background:transparent;cursor:inherit;will-change:transform,filter;transform-origin:center;transform-style:preserve-3d;backface-visibility:hidden}',
   '.fp-card img{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;display:block;border-radius:var(--fp-radius);pointer-events:none;box-shadow:0 24px 60px rgba(0,0,0,.45)}',
   '.fp-card-overlay{position:absolute;inset:0;border-radius:var(--fp-radius);overflow:hidden;display:flex;flex-direction:column;pointer-events:none;text-align:left;box-shadow:0 24px 60px rgba(0,0,0,.45)}',
