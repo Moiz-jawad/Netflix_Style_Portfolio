@@ -44,6 +44,7 @@ const MinimalPreloader = ({ onComplete }) => {
   return (
     <div
       ref={preloaderRef}
+      data-liquid-ignore
       className="fixed inset-0 z-[9999] bg-[#050505] flex items-center justify-center select-none overflow-hidden"
     >
       <div ref={contentRef} className="flex flex-col items-center gap-4">

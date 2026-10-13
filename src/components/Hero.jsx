@@ -1,372 +1,118 @@
-import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
-import pictureImg from '../assets/Portfolio/picture.png';
+import picture from '../assets/Portfolio/picture.png';
+import GlyphPortal from './ui/glyph-portal';
 
+/**
+ * Home entrance — Glyph Portal through "MOIZ" (Netflix-dark theme).
+ * Scroll into the letter to reveal the intro stage.
+ */
 const Hero = () => {
-  const sectionRef = useRef(null);
-  const cardRef = useRef(null);
-  const glareRef = useRef(null);
-  const spotlightRef = useRef(null);
-  const cursorDotRef = useRef(null);
-  const cursorRingRef = useRef(null);
-  const contentRef = useRef(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const sectionLinks = [
-    ['#home', 'Home'],
-    ['#about', 'About'],
-    ['#expertise', 'Expertise'],
-    ['#skills', 'Skills'],
-    ['#projects', 'Projects'],
-    ['#contact', 'Contact']
-  ];
-
-  const developerRoles = [
-    'JUNIOR FLUTTER DEVELOPER // TEAMX PAKISTAN',
-    'ASSOCIATE SOFTWARE DEVELOPER // QONKAR TECHNOLOGIES',
-    'FLUTTER DEVELOPER // DIGITAL EMPOWERMENT NETWORK',
-    'ANDROID DEVELOPER // DIGITAL EMPOWERMENT NETWORK'
-  ];
-
-  useEffect(() => {
-    const media = window.matchMedia('(min-width: 768px)');
-    const closeOnWide = () => {
-      if (media.matches) setMenuOpen(false);
-    };
-    media.addEventListener('change', closeOnWide);
-    return () => media.removeEventListener('change', closeOnWide);
-  }, []);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    const card = cardRef.current;
-    const content = contentRef.current;
-    if (!section || !card || !content) return;
-
-    // --- GSAP CINEMATIC ENTRANCE ANIMATION ---
-    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-    tl.fromTo(
-      section.querySelector('header'),
-      { y: -60, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1 }
-    )
-    .fromTo(
-      content.querySelectorAll('.hero-anim-item'),
-      { y: 50, opacity: 0, filter: "blur(10px)" },
-      { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.1, stagger: 0.12 },
-      "-=0.7"
-    )
-    .fromTo(
-      card,
-      { scale: 0.75, opacity: 0, rotationY: 35, rotationX: -15 },
-      { scale: 1, opacity: 1, rotationY: 0, rotationX: 0, duration: 1.4, ease: "back.out(1.2)" },
-      "-=0.9"
-    );
-
-    // --- MOUSE PHYSICS & SPOTLIGHT TRACKING ---
-    gsap.set([cursorDotRef.current, cursorRingRef.current], {
-      scale: 0.5,
-      opacity: 0,
-      transformOrigin: "50% 50%"
-    });
-
-    const xToDot = gsap.quickTo(cursorDotRef.current, "x", { duration: 0.05, ease: "power2.out" });
-    const yToDot = gsap.quickTo(cursorDotRef.current, "y", { duration: 0.05, ease: "power2.out" });
-    
-    const xToRing = gsap.quickTo(cursorRingRef.current, "x", { duration: 0.15, ease: "power3.out" });
-    const yToRing = gsap.quickTo(cursorRingRef.current, "y", { duration: 0.15, ease: "power3.out" });
-
-    const xTilt = gsap.quickTo(card, "rotationY", { duration: 0.4, ease: "power3.out" });
-    const yTilt = gsap.quickTo(card, "rotationX", { duration: 0.4, ease: "power3.out" });
-    const glareX = gsap.quickTo(glareRef.current, "x", { duration: 0.3, ease: "power2.out" });
-    const glareY = gsap.quickTo(glareRef.current, "y", { duration: 0.3, ease: "power2.out" });
-
-    const handleMouseMove = (e) => {
-      const rect = section.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const dotSize = 12;
-      const ringSize = 48;
-
-      // Update Spotlight position instantly via inline style
-      if (spotlightRef.current) {
-        spotlightRef.current.style.transform = `translate3d(${x - 300}px, ${y - 300}px, 0)`;
-      }
-
-      // Update Custom Cursor coordinates
-      xToDot(x - dotSize / 2);
-      yToDot(y - dotSize / 2);
-      xToRing(x - ringSize / 2);
-      yToRing(y - ringSize / 2);
-
-      // Card 3D Perspective Calculations
-      const cardRect = card.getBoundingClientRect();
-      const cardCenterX = cardRect.left + cardRect.width / 2 - rect.left;
-      const cardCenterY = cardRect.top + cardRect.height / 2 - rect.top;
-
-      const rotateX = -((y - cardCenterY) / (cardRect.height / 2)) * 16;
-      const rotateY = ((x - cardCenterX) / (cardRect.width / 2)) * 16;
-
-      xTilt(rotateY);
-      yTilt(rotateX);
-
-      // Holographic Glare mapping
-      glareX((x - cardRect.left) - cardRect.width / 2);
-      glareY((y - cardRect.top) - cardRect.height / 2);
-    };
-
-    const handleMouseEnter = () => {
-      gsap.to([cursorDotRef.current, cursorRingRef.current], {
-        opacity: 1,
-        scale: 1,
-        duration: 0.3,
-        ease: "power2.out"
-      });
-      if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 1, duration: 0.3 });
-    };
-
-    const handleMouseLeave = () => {
-      gsap.to([cursorDotRef.current, cursorRingRef.current], {
-        opacity: 0,
-        scale: 0.5,
-        duration: 0.3,
-        ease: "power2.inOut"
-      });
-      if (spotlightRef.current) gsap.to(spotlightRef.current, { opacity: 0, duration: 0.3 });
-      xTilt(0);
-      yTilt(0);
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseenter", handleMouseEnter);
-    section.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseenter", handleMouseEnter);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      id="home"
-      className="relative w-full min-h-screen h-auto md:h-screen bg-[#050505] overflow-x-hidden md:overflow-hidden flex flex-col justify-between select-none cursor-auto md:cursor-none"
-    >
-      <style>{`
-        @keyframes marquee {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-          display: flex;
-          width: max-content;
-          animation: marquee 35s linear infinite;
-        }
-      `}</style>
-
-      {/* 1. Cinematic Background Gradient & Marquee */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-black/90 to-[#050505] z-0">
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden opacity-10">
-          <div className="flex whitespace-nowrap animate-marquee">
-            {[...developerRoles, ...developerRoles].map((role, idx) => (
-              <span key={idx} className="text-[14vw] font-black text-red-600 mx-8 uppercase tracking-tighter">
-                {role} &bull;
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Direct Mouse Tracking Spotlight Beam (Glows wherever you move) */}
-      <div
-        ref={spotlightRef}
-        className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none z-10 opacity-0 blur-[90px] transition-opacity duration-300"
+    <div id="home" className="relative w-full bg-[#050505]">
+      <GlyphPortal
+        word="MOIZ"
+        focusChar="O"
+        interactive
+        scrollLength={2.2}
+        fontWeight={900}
+        fontFamily='Impact, Haettenschweiler, "Arial Black", "Helvetica Neue", Arial, sans-serif'
+        enterLabel="Enter portfolio"
+        annotations={false}
         style={{
-          background: 'radial-gradient(circle, rgba(229,9,20,0.35) 0%, rgba(229,9,20,0.1) 40%, transparent 70%)'
+          // Letters are a clip into --gp-field on top of --gp-paper.
+          // Paper must stay black; field must be bright red or MOIZ disappears.
+          '--gp-paper': '#050505',
+          '--gp-ink': '#ffffff',
+          '--gp-field': '#E50914',
+          '--gp-foreground': '#ffffff',
         }}
-      ></div>
-
-      {/* 3. Main Content Layer */}
-      <div ref={contentRef} className="relative z-20 w-full max-w-7xl mx-auto px-6 md:px-12 h-full flex flex-col justify-between pt-24 pb-12">
-        
-        {/* Top Netflix Cinematic Badge */}
-        <div className="hero-anim-item flex items-center justify-between w-full">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded bg-black/80 backdrop-blur-2xl border border-red-600/40 text-xs font-mono uppercase tracking-widest text-white shadow-2xl">
-            <span className="w-2 h-2 rounded-full bg-red-600 animate-ping"></span>
-            <span className="text-red-500 font-bold tracking-wider">NETFLIX DEVELOPER SERIES</span>
-            <span className="text-white/40">|</span>
-            <span className="text-white/80">SEASONS 2025 - 2026</span>
-          </div>
-          <div className="hidden md:flex items-center gap-2 text-xs font-mono text-white/50 tracking-wider">
-            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">FLUTTER & DART</span>
-            <span className="px-2 py-0.5 border border-white/20 rounded bg-black/40">KARACHI, PK</span>
-          </div>
-        </div>
-
-        {/* Main Center Cinematic Stage Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-8 my-auto">
-          
-          {/* Left Side: Developer Story & Description */}
-          <div className="lg:col-span-5 flex flex-col items-start space-y-5 text-left">
-            
-            <div className="hero-anim-item flex items-center gap-3">
-              <span className="px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest shadow-[0_0_20px_rgba(229,9,20,0.8)] animate-pulse">NOW</span>
-              <span className="text-white/80 text-xs font-mono tracking-widest uppercase">Junior Flutter Developer at TeamX Pakistan</span>
-            </div>
-
-            <h1 className="hero-anim-item text-5xl md:text-7xl font-black tracking-tighter text-white leading-[0.95] drop-shadow-[0_15px_30px_rgba(0,0,0,0.9)]">
-              MOIZ <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-700 drop-shadow-[0_0_35px_rgba(220,38,38,0.5)]">
-                JAWAD
+        background={
+          <div
+            className="absolute inset-0"
+            style={{
+              transform: 'scale(var(--gp-field-scale, 1))',
+              background: `
+                radial-gradient(circle at 30% 20%, #ff2a2a 0%, transparent 42%),
+                radial-gradient(circle at 70% 70%, #7f0008 0%, transparent 45%),
+                linear-gradient(145deg, #E50914 0%, #b20710 48%, #6b0008 100%)
+              `,
+            }}
+          />
+        }
+        front={
+          <>
+            <div className="absolute top-8 left-6 right-6 md:left-12 md:right-12 flex items-center justify-between gap-4 pointer-events-none">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-black/80 border border-red-600/40 text-[10px] font-mono uppercase tracking-widest text-white">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping" />
+                <span className="text-red-500 font-bold">Netflix Developer Series</span>
+                <span className="text-white/40">|</span>
+                <span className="text-white/70">2025 – 2026</span>
+              </div>
+              <span className="hidden sm:inline text-[10px] font-mono uppercase tracking-widest text-white/50">
+                Karachi, PK
               </span>
-            </h1>
-
-            <div className="hero-anim-item flex items-center gap-3 text-xs font-mono text-red-400 font-bold flex-wrap">
-              <span className="px-2 py-0.5 bg-red-500/10 border border-red-500/30 rounded text-red-500">Karachi, Sindh</span>
-              <span className="text-white/40">•</span>
-              <span>Flutter • Dart • React</span>
-              <span className="text-white/40">•</span>
-              <span className="text-white/70">Node.js • MongoDB • Supabase</span>
             </div>
-
-            <p className="hero-anim-item text-sm md:text-base text-white/80 font-light leading-relaxed max-w-md drop-shadow">
-              Flutter and full-stack developer building scalable mobile and web applications, with React on the front end and Node.js, Express, MongoDB, and Supabase on the back end.
+            <p className="absolute left-0 right-0 text-center text-xs md:text-sm font-mono uppercase tracking-[0.2em] text-white/60"
+              style={{ top: 'calc(var(--gp-word-top, 35%) - 2.5rem)' }}
+            >
+              A different way into the story
             </p>
-
-            {/* Action Button Set */}
-            <div className="hero-anim-item flex flex-wrap items-center gap-4 pt-2">
+            <p className="absolute left-0 right-0 text-center text-sm text-white/50"
+              style={{ top: 'calc(var(--gp-word-bottom, 55%) + 1.5rem)' }}
+            >
+              Scroll through the name — or pick a letter
+            </p>
+          </>
+        }
+      >
+        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-3">
+              <span className="px-2.5 py-0.5 bg-red-600 text-white font-black text-xs rounded tracking-widest">
+                NOW
+              </span>
+              <span className="text-white/80 text-xs font-mono tracking-widest uppercase">
+                Junior Flutter Developer at TeamX Pakistan
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.95] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)]">
+              MOIZ{' '}
+              <span className="text-white/95">JAWAD</span>
+            </h2>
+            <p className="text-sm md:text-base text-white/75 font-light leading-relaxed max-w-xl">
+              Flutter and full-stack developer building scalable mobile and web applications, with
+              React on the front end and Node.js, Express, MongoDB, and Supabase on the back end.
+            </p>
+            <div className="flex flex-wrap gap-3">
               <a
                 href="#projects"
-                className="min-h-11 px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 shadow-[0_10px_35px_rgba(255,255,255,0.3)] flex items-center gap-2 hover:scale-105 active:scale-95"
+                className="min-h-11 px-8 py-3.5 bg-white text-black font-bold text-xs uppercase tracking-widest rounded hover:bg-red-600 hover:text-white transition-all duration-300 inline-flex items-center gap-2"
               >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
                 View Projects
               </a>
               <a
                 href="#contact"
-                className="min-h-11 px-8 py-3.5 bg-neutral-900/80 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:bg-neutral-800 transition-all duration-300 shadow-xl backdrop-blur-md flex items-center gap-2 hover:scale-105 active:scale-95"
+                className="min-h-11 px-8 py-3.5 bg-neutral-900 text-white border border-white/20 font-bold text-xs uppercase tracking-widest rounded hover:border-red-600/50 transition-all duration-300 inline-flex items-center"
               >
-                <svg className="w-4 h-4 fill-none stroke-current stroke-2" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="12" y1="8" x2="12" y2="12" />
-                  <line x1="12" y1="16" x2="12.01" y2="16" />
-                </svg>
                 Contact Me
               </a>
             </div>
           </div>
 
-          {/* Center: Interactive 3D Holographic Tilt Developer Poster Frame */}
-          <div className="lg:col-span-4 flex justify-center perspective-[1200px]">
-            <div 
-              ref={cardRef}
-              className="relative group transform-gpu transition-transform duration-100 ease-out will-change-transform"
-            >
-              {/* Cinematic Red Neon Back Glow */}
-              <div className="absolute -inset-3 bg-gradient-to-r from-red-600/70 via-rose-600/40 to-purple-600/20 rounded-3xl blur-3xl opacity-90 group-hover:opacity-100 animate-pulse duration-1000"></div>
-              
-              {/* Poster Card with Glossy Sheen */}
-              <div className="relative w-[280px] md:w-[320px] p-3.5 bg-[#141414]/90 backdrop-blur-2xl rounded-2xl border border-red-600/40 shadow-[0_40px_80px_rgba(0,0,0,0.95)] overflow-hidden">
-                
-                {/* Dynamic Specular Glare Layer */}
-                <div 
-                  ref={glareRef}
-                  className="absolute inset-[-50%] w-[200%] h-[200%] bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none transform-gpu z-40"
-                ></div>
-
-                {/* Netflix Series Tag sits above the portrait so it cannot cover the head */}
-                <div className="relative z-30 mb-2 w-fit px-3 py-1 bg-red-600 text-white font-mono text-[10px] font-bold tracking-widest rounded shadow-xl">
-                  FEATURED DEV
-                </div>
-
-                <img
-                  src={pictureImg}
-                  alt="Moiz Jawad"
-                  className="w-full h-[330px] md:h-[390px] object-cover object-top rounded-xl filter contrast-125 brightness-105"
-                />
+          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+            <div className="relative w-[240px] md:w-[280px] p-3 bg-[#141414] rounded-2xl border border-red-600/40 shadow-[0_30px_60px_rgba(0,0,0,0.9)]">
+              <div className="mb-2 w-fit px-3 py-1 bg-red-600 text-white font-mono text-[10px] font-bold tracking-widest rounded">
+                FEATURED DEV
               </div>
+              <img
+                src={picture}
+                alt="Moiz Jawad"
+                className="w-full h-[280px] md:h-[320px] object-cover object-top rounded-xl"
+              />
             </div>
           </div>
-
-          {/* Right Side: Technical Specs & Stack */}
-          <div className="hero-anim-item lg:col-span-3 flex flex-col items-start lg:items-end space-y-4 text-left lg:text-right">
-            <div className="p-5 bg-black/80 backdrop-blur-2xl border border-white/15 rounded-xl shadow-2xl max-w-xs">
-              <h3 className="text-xs font-mono uppercase tracking-widest text-red-500 font-bold mb-2">Now & Education</h3>
-              <p className="text-xs text-white/80 leading-relaxed font-light">
-                Junior Flutter Developer at TeamX Pakistan. BS Computer Science, Quaid-e-Awam University of Engineering, Sciences and Technology, Nawabshah.
-              </p>
-            </div>
-          </div>
-
         </div>
-
-        {/* Bottom Cinematic Ticker */}
-        <div className="hero-anim-item flex items-center justify-between text-xs font-mono text-white/50 tracking-widest uppercase">
-          <span>KARACHI, SINDH, PAKISTAN</span>
-          <span>[ PORTFOLIO RELEASE v2.6 ]</span>
-        </div>
-      </div>
-
-      {/* 4. Ultra Pro Max Custom Precision Cursor Suite */}
-      <div
-        ref={cursorDotRef}
-        className="hidden md:block absolute top-0 left-0 z-50 pointer-events-none w-3 h-3 bg-red-600 rounded-full shadow-[0_0_15px_#E50914]"
-      ></div>
-
-      <div
-        ref={cursorRingRef}
-        className="hidden md:block absolute top-0 left-0 z-50 pointer-events-none w-12 h-12 border border-red-600/60 rounded-full flex items-center justify-center backdrop-blur-[1px]"
-      ></div>
-
-      {/* --- NETFLIX-THEMED DEVELOPER NAVBAR --- */}
-      <header className="absolute top-0 left-0 z-50 w-full max-w-7xl mx-auto px-6 md:px-12 py-4 md:py-6 flex items-center justify-between pointer-events-auto">
-        <div className="text-2xl font-black text-red-600 tracking-tighter flex items-center gap-2 drop-shadow-[0_2px_15px_rgba(229,9,20,0.9)]">
-          MOIZ<span className="w-1.5 h-1.5 rounded-full bg-white inline-block"></span>
-        </div>
-        <nav className="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-white/80">
-          {sectionLinks.map(([href, label]) => (
-            <a key={href} href={href} className="hover:text-red-500 transition-colors">{label}</a>
-          ))}
-        </nav>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            className="md:hidden min-h-11 min-w-11 px-3 rounded border border-white/20 text-[11px] font-mono uppercase tracking-widest text-white"
-            aria-expanded={menuOpen}
-            aria-label={menuOpen ? 'Close sections' : 'Open sections'}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            {menuOpen ? 'Close' : 'Sections'}
-          </button>
-          <a
-            href="#hire"
-            className="min-h-11 inline-flex items-center px-5 rounded bg-red-600 hover:bg-red-700 text-white font-bold text-xs uppercase tracking-widest transition-all duration-300 shadow-[0_0_20px_rgba(229,9,20,0.6)] hover:scale-105 active:scale-95"
-          >
-            Hire Me
-          </a>
-        </div>
-        {menuOpen && (
-          <nav className="md:hidden absolute top-full left-6 right-6 mt-2 flex flex-col rounded-xl border border-white/15 bg-[#141414]/95 p-2 shadow-2xl">
-            {sectionLinks.map(([href, label]) => (
-              <a
-                key={href}
-                href={href}
-                className="min-h-11 flex items-center px-4 text-xs font-mono uppercase tracking-widest text-white/80 hover:text-red-500"
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </a>
-            ))}
-          </nav>
-        )}
-      </header>
-    </section>
+      </GlyphPortal>
+    </div>
   );
 };
 
