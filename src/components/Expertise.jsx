@@ -1,173 +1,90 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Timeline from './ui/timeline';
 
-gsap.registerPlugin(ScrollTrigger);
+const U = (id) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1200&q=80`;
 
-const expertiseData = [
+/** Dark / red Netflix-toned stills for each career beat. */
+const topJourneyData = [
   {
-    number: "01",
-    title: "TeamX Pakistan",
-    text: "Junior Flutter Developer, Apr 2026 – Present, Karachi. Developing and maintaining cross-platform mobile applications with Flutter and Dart, collaborating with UI/UX and backend teams, integrating RESTful APIs, managing third-party packages, writing maintainable code, debugging, joining code reviews, and supporting CI/CD and Agile practices.",
-    tag: "CURRENT ROLE",
-    gradient: "from-[#1f0a0c] via-[#121212] to-[#0a0a0a]"
+    id: '2025-june',
+    year: '2025',
+    month: 'June',
+    content: 'Android Developer at Digital Empowerment Network — Flutter apps and offline-safe sync.',
+    image: U('1511707171634-5f897ff02aa9'),
+    imageAlt: 'Smartphone glowing in a dark frame — mobile chapter',
   },
   {
-    number: "02",
-    title: "Qonkar Technologies",
-    text: "Associate Software Developer, Sep 2025 – Dec 2025, Nawabshah. Front-end internship from September 16 to December 15, 2025, working on real-world web projects at Qonkar Technologies (listed on the profile as CONKAR Technologies Pvt Ltd).",
-    tag: "WEB DEVELOPMENT",
-    gradient: "from-[#1a0809] via-[#111111] to-[#090909]"
+    id: '2025-sep-qonkar',
+    year: '2025',
+    month: 'September',
+    content: 'Associate Software Developer at Qonkar Technologies — real-world front-end shipping.',
+    image: U('1555066931-4365d14bab8c'),
+    imageAlt: 'Code on a dark screen — front-end chapter',
   },
   {
-    number: "03",
-    title: "Digital Empowerment Network",
-    text: "Android Developer, Jun 2025 – Sep 2025, Islamabad. Built cross-platform applications with Flutter and Dart, implemented real-time syncing and offline-safe commands with Supabase, and developed modular UI components that reduced frontend development time by 40%.",
-    tag: "ANDROID · FLUTTER",
-    gradient: "from-[#220a0d] via-[#131313] to-[#0a0a0a]"
-  }
+    id: '2025-december-ship',
+    year: '2025',
+    month: 'December',
+    content: 'Qonkar internship wrap — production web delivery from Sept 16 to Dec 15.',
+    image: U('1461749280684-dccba630e2f6'),
+    imageAlt: 'Monitor filled with code — shipping chapter',
+  },
+  {
+    id: '2026-april',
+    year: '2026',
+    month: 'April',
+    content: 'Junior Flutter Developer at TeamX Pakistan — cross-platform apps, APIs, and CI/CD.',
+    image: U('1531297484001-80022131f5a1'),
+    imageAlt: 'Modern MacBook on a dark desk — TeamX chapter',
+  },
 ];
 
-const Expertise = () => {
-  const containerRef = useRef(null);
-  const cardRefs = useRef([]);
+const bottomJourneyData = [
+  {
+    id: '2025-sep-flutter',
+    year: '2025',
+    month: 'September',
+    content: 'Flutter track at DEN — modular UI that cut frontend build time by ~40%.',
+    image: U('1518770660439-4636190af475'),
+    imageAlt: 'Circuit board in deep shadow — Flutter systems chapter',
+  },
+  {
+    id: '2026-may',
+    year: '2026',
+    month: 'May',
+    content: 'Karachi base — TeamX, portfolio originals, and full-stack delivery worldwide.',
+    image: U('1446776653964-20c1d3a81b06'),
+    imageAlt: 'City lights at night — Karachi chapter',
+  },
+  {
+    id: '2026-june',
+    year: '2026',
+    month: 'June',
+    content: 'Shipping Flutter + React products with Node.js, Express, MongoDB, and Supabase.',
+    image: U('1558494949-ef010cbdcc31'),
+    imageAlt: 'Server racks in a dark data center — full-stack chapter',
+  },
+];
 
-  useEffect(() => {
-    const cards = cardRefs.current;
-    if (!cards.length) return;
-
-    cards.forEach((card, index) => {
-      if (index === cards.length - 1) return; // Keep the top-most card fully focused
-
-      gsap.to(card, {
-        scale: 0.92 - index * 0.025,
-        y: -15 - index * 8,
-        filter: "blur(6px)",
-        opacity: 0.4,
-        scrollTrigger: {
-          trigger: card,
-          start: `top ${90 + index * 20}px`,
-          end: "bottom top",
-          scrub: true,
-        }
-      });
-    });
-
-    // Magnetic mouse highlight per card
-    const handleMouseMove = (e, card) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    };
-
-    cards.forEach((card) => {
-      if (!card) return;
-      const listener = (e) => handleMouseMove(e, card);
-      card.addEventListener('mousemove', listener);
-      return () => card.removeEventListener('mousemove', listener);
-    });
-
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
-  }, []);
-
-  const addToRefs = (el) => {
-    if (el && !cardRefs.current.includes(el)) {
-      cardRefs.current.push(el);
-    }
-  };
-
-  return (
-    <section
-      id="expertise"
-      ref={containerRef}
-      className="relative w-full bg-[#050505] text-white py-20 px-4 md:px-12 select-none overflow-x-hidden"
-    >
-      {/* Cinematic Red Ambient Glow */}
-      <div className="absolute top-1/3 left-1/4 w-[450px] h-[450px] bg-red-600/10 rounded-full blur-[140px] pointer-events-none"></div>
-
-      <div className="relative z-10 max-w-6xl mx-auto w-full space-y-12">
-        
-        {/* Compact Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2">
-          <div className="space-y-3 max-w-xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-black/80 backdrop-blur-xl border border-red-600/40 text-[11px] font-mono uppercase tracking-widest text-white shadow-xl">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-ping"></span>
-              <span className="text-red-500 font-bold">EPISODE 02</span>
-              <span className="text-white/40">|</span>
-              <span>CORE COMPETENCIES</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
-              DIRECTOR'S CUT <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-600 to-red-700 drop-shadow-[0_0_25px_rgba(229,9,20,0.35)]">
-                TECHNICAL CAPABILITIES.
-              </span>
-            </h2>
-          </div>
-          <p className="text-white/60 text-xs md:text-sm font-light leading-relaxed max-w-xs">
-            Junior Flutter Developer at TeamX Pakistan, with earlier roles at Qonkar Technologies and Digital Empowerment Network.
-          </p>
-        </div>
-
-        {/* Compact 1-on-1 Gradient Stacking Container */}
-        <div className="relative flex flex-col gap-8 pb-20">
-          {expertiseData.map((item, index) => (
-            <div
-              key={index}
-              ref={addToRefs}
-              className={`relative md:sticky w-full p-5 md:p-8 rounded-2xl bg-gradient-to-br ${item.gradient} backdrop-blur-2xl border border-white/10 shadow-[0_20px_45px_rgba(0,0,0,0.85)] flex flex-col justify-between min-h-[230px] md:min-h-[250px] transform-gpu transition-all overflow-hidden group hover:border-red-600/50`}
-              style={{
-                zIndex: index + 1,
-                top: `${95 + index * 16}px`
-              }}
-            >
-              {/* Dynamic Mouse Spotlight Highlight */}
-              <div 
-                className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
-                style={{
-                  background: 'radial-gradient(350px circle at var(--mouse-x) var(--mouse-y), rgba(229,9,20,0.18), transparent 70%)'
-                }}
-              ></div>
-
-              {/* Crimson Accent Stripe */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-[2px] bg-gradient-to-r from-transparent via-red-600 to-transparent z-10"></div>
-
-              {/* Card Header Top */}
-              <div className="flex items-center justify-between w-full mb-4 relative z-10">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-red-500 px-2.5 py-0.5 rounded bg-red-600/10 border border-red-600/25">
-                  {item.tag}
-                </span>
-                <span className="text-2xl md:text-3xl font-mono font-black text-white/20">
-                  {item.number}
-                </span>
-              </div>
-
-              {/* Card Body */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center my-auto relative z-10">
-                <div className="lg:col-span-5">
-                  <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight leading-snug group-hover:text-red-500 transition-colors duration-300">
-                    {item.title}
-                  </h3>
-                </div>
-                <div className="lg:col-span-7">
-                  <p className="text-xs md:text-sm text-white/70 font-light leading-relaxed">
-                    {item.text}
-                  </p>
-                </div>
-              </div>
-
-              {/* Subtle Red Corner Dot */}
-              <div className="absolute bottom-4 right-4 w-1.5 h-1.5 rounded-full bg-red-600 group-hover:shadow-[0_0_10px_#E50914] z-10 transition-all"></div>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  );
-};
+/**
+ * Experience section — Hyperiux/21st horizontal Timeline,
+ * Netflix-dark theme (#050505 / #E50914) with Moiz career milestones.
+ */
+const Expertise = () => (
+  <Timeline
+    id="expertise"
+    title="Career Storyline"
+    periodLabel="2025 — 2026"
+    textColor="#ffffff"
+    mutedTextColor="rgba(255,255,255,0.55)"
+    activeColor="#E50914"
+    backgroundColor="#050505"
+    imageUrl={U('1574267432553-4b4628081c31')}
+    imageAlt="Red cinema seats — career storyline opening frame"
+    topJourneyData={topJourneyData}
+    bottomJourneyData={bottomJourneyData}
+    duration={1.4}
+  />
+);
 
 export default Expertise;

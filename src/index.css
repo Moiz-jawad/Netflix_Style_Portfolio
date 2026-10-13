@@ -9,11 +9,30 @@
   }
 }
 
-/* Phone layout is 320px through 767px. Wide layout is 768px and above. */
+/* Phone layout is 320px through 767px. Wide layout is 768px and above.
+   Do NOT set overflow-x on html/body — it creates a containing block and
+   makes position:fixed nav scroll away with the page. Clip on .page-shell. */
 html {
+  /* Lenis owns wheel smoothing; keep native smooth for in-page #anchors. */
   scroll-behavior: smooth;
-  overflow-x: clip;
   scroll-padding-top: 5.5rem;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -21,7 +40,36 @@ body {
   padding: 0;
   background-color: #000;
   color: #fff;
-  overflow-x: clip;
+}
+
+.page-shell {
+  /* clip both axes so overflow-x:clip does not force overflow-y:auto
+     (that falsely becomes Glyph Portal's scroll parent on wide screens). */
+  overflow: clip;
+  width: 100%;
+}
+
+/* Soft cinematic card rim — no spinning beam */
+.netflix-soft-rim {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    165deg,
+    rgba(229, 9, 20, 0.08) 0%,
+    transparent 42%,
+    transparent 100%
+  );
+  opacity: 0.65;
+  transition: opacity 0.5s ease;
+}
+
+.netflix-soft-card:hover .netflix-soft-rim {
+  opacity: 1;
+  background: linear-gradient(
+    165deg,
+    rgba(229, 9, 20, 0.16) 0%,
+    transparent 48%,
+    transparent 100%
+  );
 }
 
 [data-aos="drop-bounce"] {
